@@ -74,11 +74,12 @@
 
 
   <!-- TODO: Replace with your paper title and authors -->
-  <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title>
+  <!-- <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title> -->
+  <title>FreeCam</title>
   
   <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="static/images/camicon.jpg">
+  <link rel="apple-touch-icon" href="static/images/camicon.jpg">
   
   <!-- Critical CSS - Load synchronously -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -170,7 +171,7 @@
     "@type": "Organization",
     "name": "INSTITUTION_OR_LAB_NAME",
     "url": "https://YOUR_INSTITUTION_WEBSITE.com",
-    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
+    "logo": "https://YOUR_DOMAIN.com/static/images/camicon.jpg",
     "sameAs": [
       "https://twitter.com/YOUR_TWITTER_HANDLE",
       "https://github.com/YOUR_GITHUB_USERNAME"
@@ -186,53 +187,6 @@
     <i class="fas fa-chevron-up"></i>
   </button>
 
-  <!-- More Works Dropdown -->
-  <div class="more-works-container">
-    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
-      <i class="fas fa-flask"></i>
-      More Works
-      <i class="fas fa-chevron-down dropdown-arrow"></i>
-    </button>
-    <div class="more-works-dropdown" id="moreWorksDropdown">
-      <div class="dropdown-header">
-        <h4>More Works from Our Lab</h4>
-        <button class="close-btn" onclick="toggleMoreWorks()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="works-list">
-        <!-- TODO: Replace with your lab's related works -->
-        <a href="https://arxiv.org/abs/PAPER_ID_1" class="work-item" target="_blank">
-          <div class="work-info">
-            <!-- TODO: Replace with actual paper title -->
-            <h5>Paper Title 1</h5>
-            <!-- TODO: Replace with brief description -->
-            <p>Brief description of the work and its main contribution.</p>
-            <!-- TODO: Replace with venue and year -->
-            <span class="work-venue">Conference/Journal 2024</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <!-- TODO: Add more related works or remove extra items -->
-        <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 2</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 3</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
-    </div>
-  </div>
 
   <main id="main-content">
   <section class="hero">
@@ -241,21 +195,26 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <!-- TODO: Replace with your paper title -->
-            <h1 class="title is-1 publication-title">Academic Project Page</h1>
+            <!-- <h1 class="title is-2 publication-title">FreeCam: Camera Controlled Video Generation with Improved Pose Fidelity without Depth Prior</h1> -->
+            <h1 class="title is-2 publication-title">FreeCam: Camera-Controlled Video Generation for High Pose Fidelity without Depth Priors</h1>            
             <div class="is-size-5 publication-authors">
               <!-- TODO: Replace with your paper authors and their personal links -->
               <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
+                <a href="https://emjay73.github.io/" target="_blank">Min-Jung Kim</a><sup>*</sup>,</span>
                 <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
+                  <a href="https://scholar.google.co.kr/citations?user=4SCCBFwAAAAJ&hl=ko" target="_blank">Jeongho Kim</a><sup>*</sup>,</span>
                   <span class="author-block">
-                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a>
+                    <a href="https://scholar.google.co.kr/citations?hl=ko&user=Jp-zhtUAAAAJ" target="_blank">Hoiyeong Jin</a>,</span>
+                  </span>
+                  <span class="author-block">
+                    <a href="https://sites.google.com/site/jaegulchoo" target="_blank">Jaegul Choo</a>
                   </span>
                   </div>
 
                   <div class="is-size-5 publication-authors">
                     <!-- TODO: Replace with your institution and conference/journal info -->
-                    <span class="author-block">Institution Name<br>Conference name and year</span>
+                    <!-- <span class="author-block">KAIST<br>Arxiv</span> -->
+                    <span class="author-block">KAIST</span>
                     <!-- TODO: Remove this line if no equal contribution -->
                     <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
                   </div>
@@ -269,12 +228,12 @@
                         <span class="icon">
                           <i class="fas fa-file-pdf"></i>
                         </span>
-                        <span>Paper</span>
+                        <span>Paper (Coming Soon)</span>
                       </a>
                     </span>
 
                     <!-- TODO: Add your supplementary material PDF or remove this section -->
-                    <span class="link-block">
+                    <!-- <span class="link-block">
                       <a href="static/pdfs/supplementary_material.pdf" target="_blank"
                       class="external-link button is-normal is-rounded is-dark">
                       <span class="icon">
@@ -282,7 +241,7 @@
                       </span>
                       <span>Supplementary</span>
                     </a>
-                  </span>
+                  </span> -->
 
                   <!-- TODO: Replace with your GitHub repository URL -->
                   <span class="link-block">
@@ -291,12 +250,12 @@
                     <span class="icon">
                       <i class="fab fa-github"></i>
                     </span>
-                    <span>Code</span>
+                    <span>Code (Coming Soon)</span>
                   </a>
                 </span>
 
                 <!-- TODO: Update with your arXiv paper ID -->
-                <span class="link-block">
+                <!-- <span class="link-block">
                   <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -304,7 +263,7 @@
                   </span>
                   <span>arXiv</span>
                 </a>
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
@@ -314,18 +273,21 @@
 </section>
 
 
-<!-- Teaser video-->
+<!-- Teaser image-->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!-- TODO: Replace with your teaser video -->
-      <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata">
-        <!-- TODO: Add your video file path here -->
-        <source src="static/videos/banner_video.mp4" type="video/mp4">
-      </video>
+      <!-- TODO: Replace with your teaser image -->
+      <img src="static/images/teaser.jpg" alt="FreeCam teaser image" style="width: 100%; height: auto; max-height: 500px; object-fit: contain;">
       <!-- TODO: Replace with your video description -->
-      <h2 class="subtitle has-text-centered">
-        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
+      <h2 class="subtitle has-text-left">
+      </br>
+        <!-- We introduce <strong><em>FreeCam</em></strong>, a depth-free, camera-controlled framework for novel-view video generation with unconstrained camera paths. 
+        Using <em>infinite homography warping</em> and <em>AugMCV dataset</em>, 
+        it yields low rotation/translation errors, high visual fidelity, generalizing from synthetic to real videos. -->
+        <strong>FreeCam Results.</strong> Given a source video and a target camera trajectory, our method generates a video that faithfully follows the specified camera path. 
+        With the reference coordinate system defined by the initial frame of the source video (highlighted in red), <em>FreeCam</em> enables novel-view video synthesis along arbitrary trajectories. 
+        The examples show generated videos following backward (first) and arc (second) camera trajectories.
       </h2>
     </div>
   </div>
@@ -341,7 +303,25 @@
         <div class="content has-text-justified">
           <!-- TODO: Replace with your paper abstract -->
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
+            Novel-view video generation for dynamic scenes has emerged as a prominent direction alongside recent advances in video diffusion models. 
+            Nevertheless, existing approaches exhibit limitations that reduce flexibility. 
+            Methods that build on Image-to-Video models inherit biases from the base model, thereby constraining the target camera pose of the first frame to remain near the source. 
+            The limited diversity of camera trajectories in available datasets further restricts learned models to a narrow range of motions. 
+            While projection-based methods that rely on depth estimation do not impose explicit camera-pose constraints, they are susceptible to projection errors arising from depth warping.
+          </br>
+            To address these limitations, we present FreeCam, a depth-free, camera-controlled video-to-video generation framework supporting unconstrained camera paths. 
+            <!-- To address these limitations, we present FreeCam, a depth-free, camera-controlled video-to-video framework for novel-view video generation with unconstrained camera paths.  -->            
+            Our framework combines two key components: 
+            infinite homography warping, which encodes 3D camera rotations directly in a 2D latent space to achieve high camera-pose fidelity; 
+            and a data-augmentation pipeline that converts existing multi-view datasets into sequences with unbiased arbitrary trajectories and heterogeneous focal lengths, enabling training across diverse camera motions and focal settings.
+          </br>
+            <!-- On an evaluation set with unbiased, arbitrary camera poses, FreeCam achieves state-of-the-art trajectory accuracy while maintaining high visual fidelity, without any depth prior.  -->
+            When evaluated on an unbiased test set with arbitrary camera poses, FreeCam achieves high camera-pose accuracy while maintaining high visual fidelity, without depth prior.
+            Moreover, despite being trained exclusively on synthetic data, FreeCam generalizes well to real-world videos. 
+            <!-- Ablation studies show that combining the proposed data-processing pipeline and infinite homography warping yields +5.46 dB PSNR (22.41% relative in dB scale; 18.91 → 24.37 dB on average). -->
+            Ablation studies show that combining the proposed data-processing pipeline and infinite homography warping yields +5.46 dB PSNR on average.
+            Comparative studies further indicate that FreeCam outperforms existing methods in trajectory accuracy (rotation accuracy +20.9% and translation accuracy +38.0%) while maintaining high visual fidelity.
+            <!-- establishing a framework for precise and flexible camera-motion control in video synthesis () -->
           </p>
         </div>
       </div>
@@ -351,127 +331,111 @@
 <!-- End paper abstract -->
 
 
-<!-- Image carousel -->
+<!-- Video Gallery -->
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- TODO: Replace with your research result images -->
-        <img src="static/images/carousel1.jpg" alt="First research result visualization" loading="lazy"/>
-        <!-- TODO: Replace with description of this result -->
-        <h2 class="subtitle has-text-centered">
-          First image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel2.jpg" alt="Second research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-          Second image description.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel3.jpg" alt="Third research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-         Third image description.
-       </h2>
-     </div>
-     <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/carousel4.jpg" alt="Fourth research result visualization" loading="lazy"/>
-      <h2 class="subtitle has-text-centered">
-        Fourth image description.
-      </h2>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<!-- End image carousel -->
-
-
-
-
-<!-- Youtube video -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <!-- Paper video. -->
-      <h2 class="title is-3">Video Presentation</h2>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          
-          <div class="publication-video">
-            <!-- TODO: Replace with your YouTube video ID -->
-            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
+      <h2 class="title is-3">Qualitative Results (In-the-Wild)</h2>
+      <div class="columns is-multiline">
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_In-the-wild_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_In-the-wild_2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_In-the-wild_3.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- End youtube video -->
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Qualitative Results (WebVid Dataset)</h2>
+      <div class="columns is-multiline">
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_WebVid_3.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_WebVid_4.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_WebVid_5.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Async_WebVid_6.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Ours_Grid_FF-Sync_WebVid_1.mp4" type="video/mp4">
+          </video>
+        </div>                
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- End video gallery -->
 
 
-<!-- Video carousel -->
+<!-- Comparison with Other Methods Gallery -->
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-video1">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel1.mp4" type="video/mp4">
+      <h2 class="title is-3">Comparison with Other Methods (Synthetic Dataset)</h2>
+      <div class="columns is-multiline">
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Comparison_FF-Async_AugMCV.mp4" type="video/mp4">
           </video>
-        </div>
-        <div class="item item-video2">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video3">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel3.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
+        </div>                      
+      </div>      
     </div>
   </div>
 </section>
-<!-- End video carousel -->
 
-
-
-
-
-
-<!-- Paper poster -->
 <section class="hero is-small is-light">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <!-- TODO: Replace with your poster PDF -->
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
-        
-      </div>
+      <h2 class="title is-3">Comparison with Other Methods (WebVid Dataset)</h2>
+      <div class="columns is-multiline">
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Comparison_FF-Async.mp4" type="video/mp4">
+          </video>
+        </div>   
+        <div class="column is-full">
+          <video autoplay muted loop style="width: 100%; height: auto;">
+            <source src="static/videos/Comparison_FF-Sync.mp4" type="video/mp4">
+          </video>
+        </div>                          
+      </div>    
+      
     </div>
-  </section>
-<!--End paper poster -->
-
+  </div>
+</section>
+<!-- End comparison gallery -->
 
 
 <!--BibTex citation -->
-  <section class="section" id="BibTeX">
+  <!-- <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <div class="bibtex-header">
         <h2 class="title">BibTeX</h2>
@@ -488,7 +452,7 @@
   url={https://your-domain.com/your-project-page}
 }</code></pre>
     </div>
-</section>
+</section> -->
 <!--End BibTex citation -->
 
 
