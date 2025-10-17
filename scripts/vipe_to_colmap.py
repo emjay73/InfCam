@@ -209,7 +209,11 @@ def write_points3d_txt_from_depth(
     logger.info(f"Written points3D.txt with {len(all_points)} points")
 
 
-def extract_frames(artifact: ArtifactPath, output_dir: Path) -> Tuple[int, int]:
+def extract_frames(artifact: ArtifactPath, output_dir: Path
+    # emjay added -------------
+    , dump_images: bool
+    # -------------------------
+    ) -> Tuple[int, int]:
     """Extract frames from video to individual image files."""
     video_path = artifact.rgb_path
     images_dir = output_dir / "images"
@@ -220,16 +224,33 @@ def extract_frames(artifact: ArtifactPath, output_dir: Path) -> Tuple[int, int]:
     for frame_idx, rgb in read_rgb_artifacts(video_path):
         frame_path = images_dir / f"frame_{frame_idx:06d}.jpg"
         frame_height, frame_width = rgb.shape[:2]
-        imageio.imwrite(str(frame_path), (rgb.cpu().numpy() * 255).astype(np.uint8))
-        if frame_idx % 30 == 0:
-            logger.info(f"Extracted {frame_idx} frames")
 
-    logger.info(f"Extracted {frame_idx} frames to {images_dir}")
+        # emjay added -----------------------
+        if dump_images:
+            imageio.imwrite(str(frame_path), (rgb.cpu().numpy() * 255).astype(np.uint8))
+            if frame_idx % 30 == 0:
+                logger.info(f"Extracted {frame_idx} frames")
+        else:
+            break
+        # ----------------------------
+        # original -----------------------
+        # imageio.imwrite(str(frame_path), (rgb.cpu().numpy() * 255).astype(np.uint8))
+        # if frame_idx % 30 == 0:
+        #     logger.info(f"Extracted {frame_idx} frames")
+        # ----------------------------
+
+    if dump_images:
+        logger.info(f"Extracted {frame_idx} frames to {images_dir}")
 
     return frame_width, frame_height
 
 
-def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step: int, use_slam_map: bool):
+def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step: int, use_slam_map: bool
+        # emjay added -------------
+        , write_points3d: bool
+        , dump_images: bool
+        # -------------------------
+    ):
     """Convert ViPE reconstruction results to COLMAP format."""
 
     logger.info(
@@ -237,7 +258,14 @@ def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step
     )
 
     # Verify required files exist
-    required_files = [artifact.rgb_path, artifact.pose_path, artifact.intrinsics_path, artifact.depth_path]
+    # emjay modified ---------
+    if write_points3d:
+        required_files = [artifact.rgb_path, artifact.pose_path, artifact.intrinsics_path, artifact.depth_path]
+    else:
+        required_files = [artifact.rgb_path, artifact.pose_path, artifact.intrinsics_path]
+    # original ------------------
+    # required_files = [artifact.rgb_path, artifact.pose_path, artifact.intrinsics_path, artifact.depth_path]
+    # -------------------------
     for file_path in required_files:
         if not file_path.exists():
             raise FileNotFoundError(f"Required file not found: {file_path}")
@@ -246,15 +274,23 @@ def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Extract frames and get video dimensions
-    frame_width, frame_height = extract_frames(artifact, output_path)
+    frame_width, frame_height = extract_frames(artifact, output_path
+        # emjay added ---------
+        , dump_images=dump_images
+        # --------------------
+    )
 
     # Write COLMAP files
     write_cameras_txt(output_path, artifact, frame_width, frame_height)
     write_images_txt(output_path, artifact)
-    if use_slam_map:
-        write_points3d_txt_from_slam_map(output_path, artifact)
-    else:
-        write_points3d_txt_from_depth(output_path, artifact, depth_step)
+
+    # emjay modified ---------
+    if write_points3d:
+        if use_slam_map:
+            write_points3d_txt_from_slam_map(output_path, artifact)
+        else:
+            write_points3d_txt_from_depth(output_path, artifact, depth_step)
+    # -------------------------
 
     logger.info("COLMAP conversion completed successfully!")
     logger.info(f"Output directory: {output_path}")
@@ -288,6 +324,10 @@ def main():
         default=None,
         help="Output directory for COLMAP format (default: <vipe_path>_colmap)",
     )
+    # emjay added -------------
+    parser.add_argument("--write_points3d", action="store_true", help="Write points3D.txt")
+    parser.add_argument("--dump_images", action="store_true", help="Dump images")
+    # -------------------------
 
     args = parser.parse_args()
 
@@ -296,16 +336,29 @@ def main():
         return 1
 
     # Find artifacts
-    artifacts = list(ArtifactPath.glob_artifacts(args.vipe_path, use_video=True))
+    # emjay modified----------
+    artifacts = list(ArtifactPath.glob_artifacts(args.vipe_path, use_video=False))
     if args.sequence is not None:
-        artifacts = [artifact for artifact in artifacts if artifact.artifact_name == args.sequence]
+        artifacts = [artifact for artifact in artifacts if args.sequence in artifact.artifact_subpath.as_posix()]
+    # original ------------------
+    # artifacts = list(ArtifactPath.glob_artifacts(args.vipe_path, use_video=True))
+    # if args.sequence is not None:
+    #     artifacts = [artifact for artifact in artifacts if artifact.artifact_name == args.sequence]
+    # -------------------------------
+    
 
     # Set default output path
     if args.output is None:
         args.output = args.vipe_path.parent / f"{args.vipe_path.name}_colmap"
 
     for artifact in artifacts:
-        convert_vipe_to_colmap(artifact, args.output / artifact.artifact_name, args.depth_step, args.use_slam_map)
+        # emjay modified----------
+        convert_vipe_to_colmap( artifact, args.output / artifact.artifact_subpath / artifact.artifact_name, 
+                                args.depth_step, args.use_slam_map,
+                                args.write_points3d, args.dump_images)
+        # original ------------------
+        # convert_vipe_to_colmap(artifact, args.output / artifact.artifact_name, args.depth_step, args.use_slam_map)
+        # -------------------------------
     return 0
 
 

@@ -535,12 +535,28 @@ def get_best_phrase_from_logits(
     [xxx, yyy] is the token of the phrase within the period segementor.
     One word could correspond to multiple tokens, but it seems that one token cannot represent multiple words?
     """
-    assert logits.dim() == 1, "logits must be 2-dim"
+    assert logits.dim() == 1, "logits must be 1-dim"
 
     tokens, scores = [], []
     current_tokens, current_scores = [], []
+    
+    # emjay modified -----------------------------------------------
+    # 안전장치: logits와 input_ids 길이 체크
+    max_logits_len = logits.shape[0]
+    input_ids = tokenized["input_ids"]
+    
+    # 경고 메시지
+    if len(input_ids) > max_logits_len:
+        print(f"Warning: input_ids length ({len(input_ids)}) > logits length ({max_logits_len}), truncating")
 
-    for tid, token in enumerate(tokenized["input_ids"]):
+    for tid, token in enumerate(input_ids):
+        # 경계 체크: tid가 logits 크기를 넘으면 중단
+        if tid >= max_logits_len:
+            break
+    # original ---------------------------------------------------
+    # for tid, token in enumerate(tokenized["input_ids"]):
+    # ------------------------------------------------------------
+            
         if token in [101, 102]:
             continue
 
@@ -554,6 +570,18 @@ def get_best_phrase_from_logits(
             current_tokens.append(token)
             current_scores.append(logits[tid].item())
 
+    # emjay added -----------------------------------------------
+    # 마지막 토큰 그룹 처리 (period로 끝나지 않은 경우)
+    if current_tokens:
+        tokens.append(current_tokens)
+        scores.append(sum(current_scores))
+
+    # 토큰이 없는 경우 빈 문자열 반환
+    if not tokens:
+        print("Warning: No valid tokens found, returning empty string")
+        return ""
+    # ------------------------------------------------------------
+        
     best_idx = scores.index(max(scores))
     best_phrase = tokenizer.decode(tokens[best_idx])
 

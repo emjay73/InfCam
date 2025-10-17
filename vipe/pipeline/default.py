@@ -54,6 +54,61 @@ class DefaultAnnotationPipeline(Pipeline):
         self.out_path.mkdir(exist_ok=True, parents=True)
         self.camera_type = CameraType(self.init_cfg.camera_type)
 
+    # emjay added----------
+    def should_filter(self, stream_name: str) -> bool:
+        """Check if stream should be skipped based on skip_exists setting"""
+        if not self.out_cfg.get('skip_exists', False):
+            return False
+        
+        # Get artifact_subpath from config (same logic as in run method)
+        artifact_subpath = self.out_cfg.get('artifact_subpath', '')
+        
+        # Create artifact path to check if output files exist
+        artifact_path = io.ArtifactPath(self.out_path, artifact_subpath, stream_name)
+        
+        # Check if key output files exist
+        files_to_check = [
+            artifact_path.meta_info_path,  # Always check info file
+        ]
+        
+        
+        # emjay modified ----------
+        # Add other files based on config
+        if self.out_cfg.get('save_artifacts', False):
+            files_to_check.extend([
+                artifact_path.pose_path,
+                # artifact_path.depth_path, # emjay comment out
+                artifact_path.intrinsics_path,
+            ])
+
+        if self.post_cfg.get("depth_align_model", None) is not None:
+            files_to_check.append(artifact_path.depth_path)
+        # original ------------------
+        # # Add other files based on config
+        # if self.out_cfg.get('save_artifacts', False):
+        #     files_to_check.extend([
+        #         artifact_path.pose_path,
+        #         artifact_path.depth_path, 
+        #         artifact_path.intrinsics_path,
+        #     ])
+        
+        # -------------------
+        
+        if self.out_cfg.get('save_viz', False):
+            files_to_check.append(artifact_path.meta_vis_path)
+        
+        if self.out_cfg.get('save_slam_map', False):
+            files_to_check.append(artifact_path.slam_map_path)
+        
+        # Return True if all required files exist
+        all_exist = all(file_path.exists() for file_path in files_to_check)
+        
+        if all_exist:
+            logger.info(f"Skipping {stream_name} - output files already exist")
+        
+        return all_exist
+    # -------------------
+
     def _add_init_processors(self, video_stream: VideoStream) -> ProcessedVideoStream:
         init_processors: list[StreamProcessor] = []
 
@@ -91,15 +146,26 @@ class DefaultAnnotationPipeline(Pipeline):
         return ProcessedVideoStream(video_stream, post_processors)
 
     def run(self, video_data: VideoStream | MultiviewVideoList) -> AnnotationPipelineOutput:
+
         if isinstance(video_data, MultiviewVideoList):
             video_streams = [video_data[view_idx] for view_idx in range(len(video_data))]
-            artifact_paths = [io.ArtifactPath(self.out_path, video_stream.name()) for video_stream in video_streams]
+
+            # emjay modified----------  
+            artifact_paths = [io.ArtifactPath(self.out_path, "", video_stream.name()) for video_stream in video_streams]
+            # original ------------------
+            # artifact_paths = [io.ArtifactPath(self.out_path, video_stream.name()) for video_stream in video_streams]
+            # -------------------------------
+            
             slam_rig = video_data.rig()
 
         else:
             assert isinstance(video_data, VideoStream)
             video_streams = [video_data]
-            artifact_paths = [io.ArtifactPath(self.out_path, video_data.name())]
+            # emjay modified----------  
+            artifact_paths = [io.ArtifactPath(self.out_path, "", video_data.name())]
+            # original ------------------
+            # artifact_paths = [io.ArtifactPath(self.out_path, video_data.name())]
+            # -------------------------------
             slam_rig = None
 
         annotate_output = AnnotationPipelineOutput()

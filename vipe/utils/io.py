@@ -41,43 +41,47 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ArtifactPath:
     base_path: Path
+    # emjay added ---------
+    artifact_subpath: str
+    # ----------------------
     artifact_name: str
+
 
     @property
     def rgb_path(self) -> Path:
-        return self.base_path / "rgb" / f"{self.artifact_name}.mp4"
+        return self.base_path / "rgb" / self.artifact_subpath / f"{self.artifact_name}.mp4"
 
     @property
     def pose_path(self) -> Path:
-        return self.base_path / "pose" / f"{self.artifact_name}.npz"
+        return self.base_path / "pose" / self.artifact_subpath / f"{self.artifact_name}.npz"
 
     @property
     def depth_path(self) -> Path:
-        return self.base_path / "depth" / f"{self.artifact_name}.zip"
+        return self.base_path / "depth" / self.artifact_subpath / f"{self.artifact_name}.zip"
 
     @property
     def intrinsics_path(self) -> Path:
-        return self.base_path / "intrinsics" / f"{self.artifact_name}.npz"
+        return self.base_path / "intrinsics" / self.artifact_subpath / f"{self.artifact_name}.npz"
 
     @property
     def camera_type_path(self) -> Path:
-        return self.base_path / "intrinsics" / f"{self.artifact_name}_camera.txt"
+        return self.base_path / "intrinsics" / self.artifact_subpath / f"{self.artifact_name}_camera.txt"
 
     @property
     def flow_path(self) -> Path:
-        return self.base_path / "flow" / f"{self.artifact_name}.zip"
+        return self.base_path / "flow" / self.artifact_subpath / f"{self.artifact_name}.zip"
 
     @property
     def mask_path(self) -> Path:
-        return self.base_path / "mask" / f"{self.artifact_name}.zip"
+        return self.base_path / "mask" / self.artifact_subpath / f"{self.artifact_name}.zip"
 
     @property
     def mask_phrase_path(self) -> Path:
-        return self.base_path / "mask" / f"{self.artifact_name}.txt"
+        return self.base_path / "mask" / self.artifact_subpath / f"{self.artifact_name}.txt"
 
     @property
     def meta_info_path(self) -> Path:
-        return self.base_path / "vipe" / f"{self.artifact_name}_info.pkl"
+        return self.base_path / "vipe" / self.artifact_subpath / f"{self.artifact_name}_info.pkl"
 
     @classmethod
     def glob_artifacts(cls, base_path: Path, use_video: bool = False) -> Iterator["ArtifactPath"]:
@@ -86,9 +90,14 @@ class ArtifactPath:
                 artifact_name = artifact_path.stem
                 yield cls(base_path, artifact_name)
         else:
-            for artifact_path in (base_path / "vipe").glob("*_info.pkl"):
+            # emjay modified----------
+            for artifact_path in (base_path / "vipe").glob("**/*_info.pkl"):
+                artifact_subpath = artifact_path.parent.relative_to(base_path / "vipe")
+            # original ------------------
+            # for artifact_path in (base_path / "vipe").glob("*_info.pkl"):
+            # -------------------------------
                 artifact_name = artifact_path.stem.replace("_info", "")
-                yield cls(base_path, artifact_name)
+                yield cls(base_path, artifact_subpath, artifact_name)
 
     @property
     def meta_vis_path(self) -> Path:

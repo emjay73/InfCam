@@ -20,6 +20,10 @@ import torch
 
 from vipe.streams.base import ProcessedVideoStream, StreamList, VideoFrame, VideoStream
 
+# emjay added ---------
+import omegaconf
+# -------------------
+
 
 class FrameDirStream(VideoStream):
     """
@@ -47,12 +51,21 @@ class FrameDirStream(VideoStream):
         if not self.frame_files:
             raise ValueError(f"No image files found in directory: {path}")
 
-        # Read metadata from first frame
-        first_frame = cv2.imread(str(self.frame_files[0]))
-        if first_frame is None:
-            raise ValueError(f"Could not read first frame: {self.frame_files[0]}")
+        # emjay modified ------------
+        # Read metadata from second frame # we concat first frame from source video, which may have different size from other frames.
+        second_frame = cv2.imread(str(self.frame_files[1]))
+        if second_frame is None:
+            raise ValueError(f"Could not read second frame: {self.frame_files[1]}")
         
-        self._height, self._width = first_frame.shape[:2]
+        self._height, self._width = second_frame.shape[:2]
+        # original ------------------
+        # # Read metadata from first frame
+        # first_frame = cv2.imread(str(self.frame_files[0]))
+        # if first_frame is None:
+        #     raise ValueError(f"Could not read first frame: {self.frame_files[0]}")
+        
+        # self._height, self._width = first_frame.shape[:2]
+        # ----------------------------
         
         # Assume 30 fps for frame directories (this is just for compatibility)
         self._fps = 30.0
@@ -99,6 +112,10 @@ class FrameDirStream(VideoStream):
         if frame is None:
             raise ValueError(f"Could not read frame: {frame_path}")
 
+        # emjay added ------------
+        if frame.shape[:2] != (self._height, self._width):
+            frame = cv2.resize(frame, (self._width, self._height))
+        # ----------------------------
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_rgb = torch.as_tensor(frame).float() / 255.0
         frame_rgb = frame_rgb.cuda()
@@ -107,31 +124,111 @@ class FrameDirStream(VideoStream):
 
 
 class FrameDirStreamList(StreamList):
-    def __init__(self, base_path: str, frame_start: int, frame_end: int, frame_skip: int, cached: bool = False) -> None:
+    def __init__(self, base_path, frame_start: int, frame_end: int, frame_skip: int, cached: bool = False
+            # emjay added ---------
+            , name_path_parts: int = 6
+            # -------------------
+        ) -> None:
         super().__init__()
-        base_path_obj = Path(base_path)
         
-        if base_path_obj.is_dir():
-            # Single directory of frames
-            self.frame_directories = [base_path_obj]
+        # Handle both single path (str) and multiple paths (list)
+        if isinstance(base_path, str):
+            base_paths = [base_path]
+        elif isinstance(base_path, list) or isinstance(base_path, omegaconf.listconfig.ListConfig):
+            base_paths = base_path
         else:
-            # Look for subdirectories that might contain frames
-            if base_path_obj.parent.exists():
-                self.frame_directories = [d for d in base_path_obj.parent.iterdir() if d.is_dir() and d.name == base_path_obj.name]
-            else:
-                raise ValueError(f"Directory not found: {base_path}")
+            raise ValueError(f"base_path must be str or list, got {type(base_path)}")
+        
+        self.frame_directories = []
+        
+        # Process each base_path
+        for bp in base_paths:
+            base_path_obj = Path(bp)
+            
+            if not base_path_obj.exists():
+                raise ValueError(f"Path not found: {base_path_obj}")
+            
+            if not base_path_obj.is_dir():
+                raise ValueError(f"Path is not a directory: {base_path_obj}")
+            
+            # Find all directories containing images (recursively)
+            image_dirs = self._find_image_directories(base_path_obj)
+            self.frame_directories.extend(image_dirs)
                 
         if not self.frame_directories:
-            raise ValueError(f"No frame directories found at: {base_path}")
+            raise ValueError(f"No frame directories found in: {base_paths}")
             
         self.frame_range = range(frame_start, frame_end, frame_skip)
         self.cached = cached
+        # emjay added ---------
+        self.name_path_parts = name_path_parts
+        # -------------------
+    def _find_image_directories(self, root_path: Path) -> list[Path]:
+        """
+        Recursively find all directories containing image files.
+        
+        Logic:
+        1. If root_path contains images directly → return [root_path]
+        2. If root_path has subdirectories with images → return those subdirectories
+        3. Recursively search all subdirectories for image-containing folders
+        """
+        image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.tif'}
+        
+        def has_images(directory: Path) -> bool:
+            """Check if directory contains any image files"""
+            if not directory.is_dir():
+                return False
+            for file in directory.iterdir():
+                if file.is_file() and file.suffix.lower() in image_extensions:
+                    return True
+            return False
+        
+        def find_recursive(directory: Path) -> list[Path]:
+            """Recursively find all directories with images"""
+            result = []
+            
+            # Check if current directory has images
+            if has_images(directory):
+                result.append(directory)
+                # If this directory has images, don't search subdirectories
+                # (assume this is the leaf level we want)
+                return result
+            
+            # If no images in current directory, search subdirectories
+            for item in directory.iterdir():
+                if item.is_dir():
+                    # Recursively search subdirectories
+                    result.extend(find_recursive(item))
+            
+            return result
+        
+        image_dirs = find_recursive(root_path)
+        
+        # Sort for consistent ordering
+        return sorted(image_dirs)
 
     def __len__(self) -> int:
         return len(self.frame_directories)
 
     def __getitem__(self, index: int) -> VideoStream:
-        stream: VideoStream = FrameDirStream(self.frame_directories[index], seek_range=self.frame_range)
+        # emjay modified ---------
+               
+        directory_path = self.frame_directories[index]
+        
+        # Create name from last N folder names joined by slash
+        path_parts = directory_path.parts
+        last_n_parts = path_parts[-self.name_path_parts:] if len(path_parts) >= self.name_path_parts else path_parts
+        custom_name = "/".join(last_n_parts)
+        
+        stream: VideoStream = FrameDirStream(
+            directory_path, 
+            seek_range=self.frame_range,
+            name=custom_name
+        )
+        # original ---------
+        # stream: VideoStream = FrameDirStream(self.frame_directories[index], seek_range=self.frame_range)
+        # -------------------
+
         if self.cached:
             stream = ProcessedVideoStream(stream, []).cache(desc="Loading frames", online=False)
         return stream

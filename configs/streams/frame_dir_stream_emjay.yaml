@@ -1,0 +1,17 @@
+instance: vipe.streams.frame_dir_stream.FrameDirStreamList
+
+# emjay modified ---------
+
+base_path:
+  - results/ours/20250822__with_ktd_fixK_splitval__BS8_ACCUM2_320x544x41_step20000_val_ref40/cam_type1/frames
+  - results/ours/20250822__with_ktd_fixK_splitval__BS8_ACCUM2_320x544x41_step20000_val_ref40/cam_type2/frames
+
+# -------------------
+
+frame_start: 0
+frame_end: -1
+frame_skip: 1
+cached: false
+
+# Number of path parts to use for stream name (from the end)
+name_path_parts: 6  # Default: last 6 parts

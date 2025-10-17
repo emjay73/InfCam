@@ -1,4 +1,114 @@
-# ViPE: Video Pose Engine for Geometric 3D Perception
+# Evaluation
+
+## Environment
+Follow the environmental setup of vipe (https://github.com/nv-tlabs/vipe).\
+And then install the following additional packages.
+```
+pip install pandas
+```
+
+## WebVid Samples Evaluation
+Step1. prepare your source videos in the following format
+```
+DATA
+└── webvid
+    └── videos
+        ├── video0.mp4
+        ├── video1.mp4
+        ...
+        └── video99.mp4
+```
+Step2. prepare your resulting video and camera pose used to generate the video in the following format
+```
+results
+└── exp_step20k_ref40
+    ├── cam_type1
+    │   ├── video0.mp4
+    │   ├── 
+    │   ...
+    │   └── video99.mp4
+    ├── cam_type2
+    ...
+    └── cam_type10
+```
+```
+cameras
+├── camera_extrinsics_ref0.json
+└── camera_extrinsics_ref40.json
+```
+
+Step3. run vipe
+```
+# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe.sh before run
+# ex) GPU_DEVICES="7" # support only single gpu.
+# ex) CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
+# ex) DATASET_TYPE='webvid'
+# ex) PATH_SRC_DIR="./DATA/webvid"
+# ex) PATH_GEN_DIR="results/exp_step20k_ref40"
+
+bash run_vipe.sh
+```
+
+Step4. run evaluation
+```
+bash run_metric.sh
+```
+
+## AugMCV test split Evaluation
+Step1. prepare your test split in the following format
+```
+DATA
+└── AugMCV
+    ├── train
+    └── val
+        ├── f18_aperture10
+        ├── f18_aperture10_aug
+        ├── f24_aperture5
+        ├── f24_aperture5_aug
+        ├── f35_aperture2.4
+        ├── f35_aperture2.4_aug        
+        ├── f50_aperture2.4
+        └──metadata_static_video.csv
+```
+Step2. prepare your resulting video in the following format
+```
+results
+└── exp_step20k_ref40
+    ├── cam_type1
+    │   ├── video0.mp4
+    │   ├── 
+    │   ...
+    │   └── video99.mp4
+    ├── cam_type2
+    ...
+    └── cam_type10
+```
+
+Step3. run vipe
+```
+# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe.sh before run
+# ex) GPU_DEVICES="7" # support only single gpu.
+# ex) CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
+# ex) DATASET_TYPE='webvid'
+# ex) PATH_SRC_DIR="./DATA/webvid"
+# ex) PATH_GEN_DIR="results/exp_step20k_ref40"
+
+bash run_vipe.sh
+```
+
+Step4. run evaluation
+```
+# modify GPU_DEVICES, DATASET_TYPE, GT_JSON, SEQ_NAME variables in the run_metric.sh before run
+# ex) GPU_DEVICES="7" 
+# ex) DATASET_TYPE="webvid"
+# ex) GT_JSON="cameras/camera_extrinsics_ref40.json"
+# ex) SEQ_NAME="results/exp_step20k_ref40" # check vipe_results/vipe and write the subfolder path of interest.
+
+bash run_metric.sh
+```
+
+# ViPE readme for reference
+ViPE: Video Pose Engine for Geometric 3D Perception
 
 <p align="center">
   <img src="assets/teaser.gif" alt="teaser"/>
