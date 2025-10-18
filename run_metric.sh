@@ -18,8 +18,8 @@ SEQ_NAME="recam_edit_emjay_jho/results/webvidmix_highresol_ours_93000step_ref40"
 # convert vipe -> colmap
 # write_points3d=false, dump_images=false를 default로 설정해둠.
 # seq_name 안쓰면 전부 다 변환.
-# python scripts/vipe_to_colmap.py vipe_results \
-#     --sequence ${SEQ_NAME} 
+python scripts/vipe_to_colmap.py vipe_results \
+    --sequence ${SEQ_NAME} 
     # --sequence 20250822__with_ktd_fixK_splitval__BS8_ACCUM2_320x544x41_step20000_val_ref40 # 안쓰면 전부 다 변환.
 
 # compute metrics
