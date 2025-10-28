@@ -3,22 +3,26 @@
 # how to:
 # bash run_vipe.sh
 
-GPU_DEVICES="0" # multi gpu 사용 안함. only one gpu.
+GPU_DEVICES="7" # multi gpu 사용 안함. only one gpu.
 CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
-# CAM_TYPES=(1 2 3 4 5)
+#CAM_TYPES=(1 2 3 4 5)
 #CAM_TYPES=(6 7 8 9 10)
 
-# DATASET_TYPE='webvid'
-# PATH_SRC_DIR="./DATA/webvid_mix_dynamic"
+# select one of dataset type ------------------
+#DATASET_TYPE='webvid'
+#PATH_SRC_DIR="./DATA/webvid_mix_dynamic2"
 
+## webvid highresol
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_93000step_ref40"
+
+# --------------------------------------------
 DATASET_TYPE='val'
 PATH_SRC_DIR="./DATA/MultiCamVideo-Dataset-hy/val"
 
-# webvid highresol
-# PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_93000step_ref40"
-
 # val highresol
-PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/val_highresol_ours_20000step"
+PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/val_highresol_ours_93000step"
+# --------------------------------------------
+
 
 # parse video
 if [ "$DATASET_TYPE" = "webvid" ]; then
@@ -48,7 +52,7 @@ echo "Generated PATH_GEN_CAM_DIRS: $PATH_GEN_CAM_DIRS"
 
 # run vipe
 CUDA_VISIBLE_DEVICES=${GPU_DEVICES} python run_vipe.py \
-    pipeline.output.skip_exists=true \
+    pipeline.output.skip_exists=false \
     pipeline.output.save_viz=false \
     pipeline.post.depth_align_model=null \
     streams.base_path="${PATH_GEN_CAM_DIRS}" \
