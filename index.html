@@ -75,7 +75,7 @@
 
   <!-- TODO: Replace with your paper title and authors -->
   <!-- <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title> -->
-  <title>FreeCam</title>
+  <title>InfCam</title>
   
   <!-- Favicon and App Icons -->
   <link rel="icon" type="image/x-icon" href="static/images/camicon.jpg">
@@ -195,8 +195,8 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <!-- TODO: Replace with your paper title -->
-            <!-- <h1 class="title is-2 publication-title">FreeCam: Camera Controlled Video Generation with Improved Pose Fidelity without Depth Prior</h1> -->
-            <h1 class="title is-2 publication-title">FreeCam: Camera-Controlled Video Generation for High Pose Fidelity without Depth Priors</h1>            
+            <!-- <h1 class="title is-2 publication-title">Infinite-Homography as Robust Conditioning for Camera-Controlled Video Generation</h1> -->
+            <h1 class="title is-2 publication-title">Infinite-Homography as Robust Conditioning for Camera-Controlled Video Generation</h1>            
             <div class="is-size-5 publication-authors">
               <!-- TODO: Replace with your paper authors and their personal links -->
               <span class="author-block">
@@ -206,6 +206,10 @@
                   <span class="author-block">
                     <a href="https://scholar.google.co.kr/citations?hl=ko&user=Jp-zhtUAAAAJ" target="_blank">Hoiyeong Jin</a>,</span>
                   </span>
+                  <span class="author-block">
+                    <a href="https://junhahyung.github.io/" target="_blank">Junha Hyung</a>,</span>
+                  </span>
+              
                   <span class="author-block">
                     <a href="https://sites.google.com/site/jaegulchoo" target="_blank">Jaegul Choo</a>
                   </span>
@@ -278,7 +282,7 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <!-- TODO: Replace with your teaser image -->
-      <img src="static/images/teaser.jpg" alt="FreeCam teaser image" style="width: 100%; height: auto; max-height: 500px; object-fit: contain;">
+      <img src="static/images/teaser_3rows.jpg" alt="FreeCam teaser image" style="width: 100%; height: auto; max-height: 500px; object-fit: contain;">
       <!-- TODO: Replace with your video description -->
       <h2 class="subtitle has-text-left">
       </br>
@@ -303,25 +307,18 @@
         <div class="content has-text-justified">
           <!-- TODO: Replace with your paper abstract -->
           <p>
-            Novel-view video generation for dynamic scenes has emerged as a prominent direction alongside recent advances in video diffusion models. 
-            Nevertheless, existing approaches exhibit limitations that reduce flexibility. 
-            Methods that build on Image-to-Video models inherit biases from the base model, thereby constraining the target camera pose of the first frame to remain near the source. 
-            The limited diversity of camera trajectories in available datasets further restricts learned models to a narrow range of motions. 
-            While projection-based methods that rely on depth estimation do not impose explicit camera-pose constraints, they are susceptible to projection errors arising from depth warping.
+          Recent progress in video diffusion models has spurred growing interest in camera-controlled novel-view video generation for dynamic scenes, aiming to provide creators with cinematic camera control capabilities in post-production.
+          A key challenge in camera-controlled video generation is ensuring fidelity to the specified camera pose, while maintaining view consistency and reasoning about occluded geometry from limited observations.
+          To address this, existing methods either train trajectory-conditioned video generation model on trajectory–video pair dataset, or estimate depth from the input video to reproject it along a target trajectory and generate the unprojected regions.
+          Nevertheless, existing methods struggle to generate camera-pose–faithful, high-quality videos for two main reasons:
+          (1) reprojection-based approaches are highly susceptible to errors caused by inaccurate depth estimation; and % during reprojection; and 
+          (2) the limited diversity of camera trajectories in existing datasets restricts learned models.
           </br>
-            To address these limitations, we present FreeCam, a depth-free, camera-controlled video-to-video generation framework supporting unconstrained camera paths. 
-            <!-- To address these limitations, we present FreeCam, a depth-free, camera-controlled video-to-video framework for novel-view video generation with unconstrained camera paths.  -->            
-            Our framework combines two key components: 
-            infinite homography warping, which encodes 3D camera rotations directly in a 2D latent space to achieve high camera-pose fidelity; 
-            and a data-augmentation pipeline that converts existing multi-view datasets into sequences with unbiased arbitrary trajectories and heterogeneous focal lengths, enabling training across diverse camera motions and focal settings.
-          </br>
-            <!-- On an evaluation set with unbiased, arbitrary camera poses, FreeCam achieves state-of-the-art trajectory accuracy while maintaining high visual fidelity, without any depth prior.  -->
-            When evaluated on an unbiased test set with arbitrary camera poses, FreeCam achieves high camera-pose accuracy while maintaining high visual fidelity, without depth prior.
-            Moreover, despite being trained exclusively on synthetic data, FreeCam generalizes well to real-world videos. 
-            <!-- Ablation studies show that combining the proposed data-processing pipeline and infinite homography warping yields +5.46 dB PSNR (22.41% relative in dB scale; 18.91 → 24.37 dB on average). -->
-            Ablation studies show that combining the proposed data-processing pipeline and infinite homography warping yields +5.46 dB PSNR on average.
-            Comparative studies further indicate that FreeCam outperforms existing methods in trajectory accuracy (rotation accuracy +20.9% and translation accuracy +38.0%) while maintaining high visual fidelity.
-            <!-- establishing a framework for precise and flexible camera-motion control in video synthesis () -->
+          To address these limitations, we present InfCam, a depth-free, camera-controlled video-to-video generation framework with high pose fidelity.
+          The framework integrates two key components:
+          (1) infinite homography warping, which encodes 3D camera rotations directly within the 2D latent space of a video diffusion model. Conditioning on this noise-free rotational information, the residual parallax term is predicted through end-to-end training to achieve high camera-pose fidelity; and
+          (2) a data augmentation pipeline that transforms existing synthetic multiview datasets into sequences with diverse trajectories and focal lengths.
+          Experimental results demonstrate that InfCam outperforms baseline methods in camera-pose accuracy and visual fidelity, generalizing well from synthetic to real-world data.
           </p>
         </div>
       </div>
@@ -396,7 +393,7 @@
 
 
 <!-- Comparison with Other Methods Gallery -->
-<section class="hero is-small">
+<!-- <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">Comparison with Other Methods (Synthetic Dataset)</h2>
@@ -430,7 +427,7 @@
       
     </div>
   </div>
-</section>
+</section> -->
 <!-- End comparison gallery -->
 
 
