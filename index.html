@@ -282,16 +282,14 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <!-- TODO: Replace with your teaser image -->
-      <img src="static/images/teaser_3rows.jpg" alt="FreeCam teaser image" style="width: 100%; height: auto; max-height: 500px; object-fit: contain;">
+      <img src="static/images/teaser_3rows.jpg" alt="InfCam teaser image" style="width: 100%; height: auto; max-height: 500px; object-fit: contain;">
       <!-- TODO: Replace with your video description -->
       <h2 class="subtitle has-text-left">
       </br>
-        <!-- We introduce <strong><em>FreeCam</em></strong>, a depth-free, camera-controlled framework for novel-view video generation with unconstrained camera paths. 
-        Using <em>infinite homography warping</em> and <em>AugMCV dataset</em>, 
-        it yields low rotation/translation errors, high visual fidelity, generalizing from synthetic to real videos. -->
-        <strong>FreeCam Results.</strong> Given a source video and a target camera trajectory, our method generates a video that faithfully follows the specified camera path. 
-        With the reference coordinate system defined by the initial frame of the source video (highlighted in red), <em>FreeCam</em> enables novel-view video synthesis along arbitrary trajectories. 
-        The examples show generated videos following backward (first) and arc (second) camera trajectories.
+        <strong>InfCam Results.</strong> Given a video and a target camera trajectory, InfCam generates a video that faithfully follows the specified camera path. 
+        The world coordinate origin is defined by the first frame’s camera pose (highlighted in red). 
+        The leftmost column visualizes the backward, arc, and rotational camera trajectories, and the right side shows input–generated video pairs corresponding to each trajectory.
+        The rotational trajectory is generated with a shorter focal length to illustrate wide field-of-view generation. The black dashed box in the last row indicates the original field-of-view of the input video.
       </h2>
     </div>
   </div>
