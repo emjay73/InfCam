@@ -326,11 +326,81 @@
 <!-- End paper abstract -->
 
 
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Motivation</h2>
+      <div class="columns">
+        <div class="column is-full">
+          <figure class="image">
+            <img src="static/images/motivation.png" alt="Motivation">
+          </figure>
+          <p class="has-text-justified is-size-6 mt-3">
+            (a) In our infinite homography-based approach, the model is conditioned on images warped by H∞, so it focuses on learning the parallax relative to the plane at infinity.
+            This parallax is confined to the region between the epipole e′ and the point x∞ on the epipolar line l′ (shown as the yellow segment), which reduces the search space and leads to higher camera pose fidelity.
+            End-to-end training further enables the network to implicitly refine the underlying 3D geometry, correcting inaccuracies in the unprojected 3D point X.
+          </br>
+            (b) In the reprojection-based approach, errors in depth estimation produce unreliable conditioning and cause artifacts in the generated image.
+            Because no gradients flow back into the depth estimation network, the incorrect reprojection position x′ remains fixed during training, preventing these errors from being corrected.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Method</h2>
+
+      <h3 class="subtitle is-4 mt-4">Model Architecture</h3>
+      <div class="columns">
+        <div class="column is-full">
+          <figure class="image">
+            <img src="static/images/model_architecture.png" alt="Infinite Homography vs. Reprojection-based Conditioning">
+          </figure>
+          <p class="has-text-justified is-size-6 mt-3">
+            (a) In our infinite homography-based approach, the model is conditioned on images warped by H∞, so it focuses on learning the parallax relative to the plane at infinity.
+            This parallax is confined to the region between the epipole e′ and the point x∞ on the epipolar line l′ (shown as the yellow segment), which reduces the search space and leads to higher camera pose fidelity.
+            End-to-end training further enables the network to implicitly refine the underlying 3D geometry, correcting inaccuracies in the unprojected 3D point X.
+            (b) In the reprojection-based approach, errors in depth estimation produce unreliable conditioning and cause artifacts in the generated image.
+            Because no gradients flow back into the depth estimation network, the incorrect reprojection position x′ remains fixed during training, preventing these errors from being corrected.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="subtitle is-4 mt-5">Augmented MultiCamVideo (AugMCV)</h3>
+      <div class="columns">
+        <div class="column is-full">
+          <figure class="image">
+            <img src="static/images/data_preparation.png" alt="Model Architecture">
+          </figure>
+          <p class="has-text-justified is-size-6 mt-3">
+            (a) <strong>SynCamVideo.</strong> Captured with stationary cameras placed at distinct positions.</br>
+            (b) <strong>MultiCamVideo.</strong> Captured with dynamic cameras following diverse trajectories, all sharing the same initial frame.</br>
+            (c) <strong>Augmented MultiCamVideo.</strong> An augmented version of MultiCamVideo with varied starting poses and different focal lengths.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
 <!-- Video Gallery -->
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title is-3">Qualitative Results (In-the-Wild)</h2>
+      <h2 class="title is-3">Experimental Results</h2>
+
+      <!-- Qualitative Results (In-the-Wild) -->
+      <h3 class="subtitle is-4 mt-4">Qualitative Results (In-the-Wild)</h3>
       <div class="columns is-multiline">
         <div class="column is-full">
           <video autoplay muted loop style="width: 100%; height: auto;">
@@ -348,14 +418,9 @@
           </video>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">Qualitative Results (WebVid Dataset)</h2>
+      <!-- Qualitative Results (WebVid Dataset) -->
+      <h3 class="subtitle is-4 mt-5">Qualitative Results (WebVid Dataset)</h3>
       <div class="columns is-multiline">
         <div class="column is-full">
           <video autoplay muted loop style="width: 100%; height: auto;">
@@ -381,7 +446,38 @@
           <video autoplay muted loop style="width: 100%; height: auto;">
             <source src="static/videos/Ours_Grid_FF-Sync_WebVid_1.mp4" type="video/mp4">
           </video>
-        </div>                
+        </div>
+      </div>
+
+      <!-- Quantitative Results -->
+      <h3 class="subtitle is-4 mt-5">Quantitative Results</h3>
+      <div class="columns">
+        <div class="column is-6">
+          <figure class="image">
+            <img src="static/images/augmcv_result.png" alt="AugMCV result">
+            <figcaption class="has-text-centered is-size-6 mt-2">
+              <strong>AugMCV dataset</strong>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="column is-6">
+          <figure class="image">
+            <img src="static/images/webvid_result.png" alt="WebVid result">
+            <figcaption class="has-text-centered is-size-6 mt-2">
+              <strong>WebVid dataset</strong>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-full">
+          <p class="has-text-justified is-size-6 mt-3">
+            Our method is evaluated on the AugMCV dataset under two scenarios: (1) source and target videos with identical camera intrinsics, and (2) source and target videos with different camera intrinsics.
+            Across both settings and all metrics, our approach consistently outperforms the baselines, indicating that the generated videos are clearly closer to the ground truth.</br>
+            We further validate our method on the WebVid dataset, where it again consistently outperforms baseline approaches in terms of both camera pose accuracy and visual fidelity, with particularly pronounced gains in camera pose accuracy.
+          </p>
+        </div>
       </div>
 
     </div>
