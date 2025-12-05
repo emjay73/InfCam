@@ -336,11 +336,11 @@
             <img src="static/images/motivation.png" alt="Motivation">
           </figure>
           <p class="has-text-justified is-size-6 mt-3">
-            (a) In our infinite homography-based approach, the model is conditioned on images warped by H∞, so it focuses on learning the parallax relative to the plane at infinity.
+            (a) <strong>Proposed infinite homography-based approach.</strong> The model is conditioned on images warped by H∞, so it focuses on learning the parallax relative to the plane at infinity.
             This parallax is confined to the region between the epipole e′ and the point x∞ on the epipolar line l′ (shown as the yellow segment), which reduces the search space and leads to higher camera pose fidelity.
             End-to-end training further enables the network to implicitly refine the underlying 3D geometry, correcting inaccuracies in the unprojected 3D point X.
           </br>
-            (b) In the reprojection-based approach, errors in depth estimation produce unreliable conditioning and cause artifacts in the generated image.
+            (b) <strong>Existing reprojection-based approach.</strong> Errors in depth estimation produce unreliable conditioning and cause artifacts in the generated image.
             Because no gradients flow back into the depth estimation network, the incorrect reprojection position x′ remains fixed during training, preventing these errors from being corrected.
           </p>
         </div>
@@ -362,11 +362,8 @@
             <img src="static/images/model_architecture.png" alt="Infinite Homography vs. Reprojection-based Conditioning">
           </figure>
           <p class="has-text-justified is-size-6 mt-3">
-            (a) In our infinite homography-based approach, the model is conditioned on images warped by H∞, so it focuses on learning the parallax relative to the plane at infinity.
-            This parallax is confined to the region between the epipole e′ and the point x∞ on the epipolar line l′ (shown as the yellow segment), which reduces the search space and leads to higher camera pose fidelity.
-            End-to-end training further enables the network to implicitly refine the underlying 3D geometry, correcting inaccuracies in the unprojected 3D point X.
-            (b) In the reprojection-based approach, errors in depth estimation produce unreliable conditioning and cause artifacts in the generated image.
-            Because no gradients flow back into the depth estimation network, the incorrect reprojection position x′ remains fixed during training, preventing these errors from being corrected.
+            (a) <strong>DiT block with homography-guided self-attention layer.</strong> The homography-guided self-attention layer takes source, target, and warped latents, combined with camera embeddings, as input and performs per-frame attention, ensuring temporal alignment. By conditioning on warped latents, the model enables rotation-aware reasoning and constrained parallax estimation. Only the source and target latents proceed to the subsequent Wan2.1 layers.</br>
+            (b) <strong>Warping module.</strong> This module warps the input latent with infinite homography to handle rotation, then adds camera embeddings to account for translation. This decomposition simplifies reprojection to parallax estimation relative to the plane at infinity, enabling higher camera trajectory fidelity.
           </p>
         </div>
       </div>
@@ -473,13 +470,11 @@
       <div class="columns">
         <div class="column is-full">
           <p class="has-text-justified is-size-6 mt-3">
-            Our method is evaluated on the AugMCV dataset under two scenarios: (1) source and target videos with identical camera intrinsics, and (2) source and target videos with different camera intrinsics.
-            Across both settings and all metrics, our approach consistently outperforms the baselines, indicating that the generated videos are clearly closer to the ground truth.</br>
-            We further validate our method on the WebVid dataset, where it again consistently outperforms baseline approaches in terms of both camera pose accuracy and visual fidelity, with particularly pronounced gains in camera pose accuracy.
+            <strong>AugMCV dataset.</strong> We evaluate our method under two scenarios: (1) source and target videos with identical camera intrinsics, and (2) source and target videos with different camera intrinsics. Across both settings and all metrics, our approach consistently outperforms the baselines, producing videos that are clearly closer to the ground truth.</br>
+            <strong>WebVid dataset.</strong> We further validate our method on the WebVid dataset, where it again consistently outperforms baseline approaches in terms of both camera pose accuracy and visual fidelity, with particularly pronounced gains in camera pose accuracy.
           </p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
