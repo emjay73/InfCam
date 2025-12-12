@@ -461,8 +461,10 @@ def process_cam_vid_combination(cam_vid_args):
         cam, vid, path_colmap, gt_json = cam_vid_args
         # if cam == 6 and vid == 28:
         #     pdb.set_trace()
-        cam_type = f"cam_type{cam}"
-        # cam_type = f"cam{cam:02d}"
+
+        #cam_type = f"cam_type{cam}"
+        cam_type = f"cam{cam:02d}"
+
         # path_gen_dir = os.path.join(path_gen, f"{cam_type}/frames/video{vid}")
         # path_src_dir = os.path.join(path_src, f"videos/frames/video{vid}")
         # path_project_dir = os.path.join(path_colmap, f"{cam_type}/colmap")                

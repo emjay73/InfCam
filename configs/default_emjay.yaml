@@ -8,6 +8,10 @@ defaults:
 ray: false
 prefilter: false
 
+# GPU 메모리 사전 할당 설정
+gpu_id: 0
+preallocate_gpu_memory_gb: 42.0
+
 hydra:
   output_subdir: null
   job:

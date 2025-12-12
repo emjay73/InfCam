@@ -3,24 +3,39 @@
 # how to:
 # bash run_vipe.sh
 
-GPU_DEVICES="7" # multi gpu 사용 안함. only one gpu.
+GPU_DEVICES="4" # multi gpu 사용 안함. only one gpu.
 CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
 #CAM_TYPES=(1 2 3 4 5)
 #CAM_TYPES=(6 7 8 9 10)
 
 # select one of dataset type ------------------
-#DATASET_TYPE='webvid'
-#PATH_SRC_DIR="./DATA/webvid_mix_dynamic2"
+DATASET_TYPE='webvid'
+PATH_SRC_DIR="./DATA/webvid_mix_dynamic2"
 
 ## webvid highresol
 #PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_93000step_ref40"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/metric/results/recammaster/webvidmix_highresol_step20000_ref40"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/metric/results/trajectorycrafter/webvid_mix_dynamic_ref40"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/metric/results/ours/webvidmix_highresol_ours_35000step_ref40"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/metric/results/ours/webvidmix_highresol_ours_20000step_ref40"
+#PATH_GEN_DIR="/home/nas_main/hoiyeongjin/repos/Research/nvvs_baseline/GEN3C/RESULT/WEBVID/REF40"
+#PATH_GEN_DIR="/home/nas_main/hoiyeongjin/repos/Research/nvvs_baseline/GEN3C/RESULT/WEBVID/REF0"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref0"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref40_recam"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_20000step_ref0_50step"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_20000step_ref40_50step"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref0"
+#PATH_GEN_DIR="/data/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref40_recam"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_moreBS_ref0"
+PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_moreBS_ref40"
+
 
 # --------------------------------------------
-DATASET_TYPE='val'
-PATH_SRC_DIR="./DATA/MultiCamVideo-Dataset-hy/val"
+#DATASET_TYPE='val'
+#PATH_SRC_DIR="./DATA/MultiCamVideo-Dataset-hy/val"
 
 # val highresol
-PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/val_highresol_ours_93000step"
+#PATH_GEN_DIR="/home/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/val_highresol_ours_93000step"
 # --------------------------------------------
 
 
@@ -45,6 +60,10 @@ for i in "${!CAM_TYPES[@]}"; do
         PATH_GEN_CAM_DIRS+=","
     fi
     PATH_GEN_CAM_DIRS+="'${PATH_GEN_DIR}/cam_type${CAM_TYPES[$i]}/frames'"
+
+    #num="${CAM_TYPES[$i]}"
+    #cam_id="$(printf '%02d' "$num")"
+    #PATH_GEN_CAM_DIRS+="'${PATH_GEN_DIR}/cam${cam_id}/frames'"
 done
 PATH_GEN_CAM_DIRS+="]"
 

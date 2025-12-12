@@ -19,7 +19,8 @@ count = 0
 count_drop = 0
 out = []
 for cam_id in range(1, 11):
-    cam_dir = f"cam_type{cam_id}"
+    #cam_dir = f"cam_type{cam_id}"
+    cam_dir = f"cam{cam_id:02d}"
     # score_path = os.path.join(base_dir, cam_dir, "colmap", "score.json")
     score_path = os.path.join(base_dir, cam_dir, "frames", "score.json")
     

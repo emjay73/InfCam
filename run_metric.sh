@@ -1,20 +1,38 @@
 #!/bin/bash
 
-GPU_DEVICES="7" 
+GPU_DEVICES="4" 
 
-#DATASET_TYPE="webvid"
-#GT_JSON="cameras/camera_extrinsics_ref40.json"
+DATASET_TYPE="webvid"
+GT_JSON="cameras/camera_extrinsics_ref40.json"
+#GT_JSON="cameras/camera_extrinsics_ref0.json"
 
-DATASET_TYPE="validation"
-GT_JSON="DATA/val_webvidFormat/cameras/ref0"
+#DATASET_TYPE="validation"
+#GT_JSON="DATA/val_webvidFormat/cameras/ref0"
+
+#SEQ_NAME="recam_edit_emjay_jho/results/webvid_lowresol_noaugSyncam_20000step"
+#SEQ_NAME="recam_edit_emjay_jho/results/webvid_lowresol_ours_20000step"
+SEQ_NAME="GEN3C/RESULT/WEBVID/REF40"
+
+# ref0
+#SEQ_NAME="/data/jeonghokim/repos/nvvs/recam_edit_emjay_jho/results/webvidmix_highresol_ours_20000step_ref0_50step"
+#SEQ_NAME="rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref0"
 
 # webvid mix dynamic, ref40
 #SEQ_NAME="recam_edit_emjay_jho/results/webvidmix_highresol_ours_93000step_ref40"
+#SEQ_NAME="results/trajectorycrafter/webvid_mix_dynamic_ref40"
+#SEQ_NAME="results/recammaster/webvidmix_highresol_step20000_ref40"
+#SEQ_NAME="results/ours/webvidmix_highresol_ours_20000step_ref40"
+#SEQ_NAME="GEN3C/RESULT/WEBVID/REF0"
+#SEQ_NAME="GEN3C/RESULT/WEBVID/REF40"
+#SEQ_NAME="rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref40_recam"
+#SEQ_NAME="rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref0"
+#SEQ_NAME="/data/jeonghokim/repos/nvvs/rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref0"
+#SEQ_NAME="rcm/outputs/multicamhy_webvidmix_lowresol_step20000_ref40_recam"
 
 # val
 # SEQ_NAME="trajectorycrafter/val_highresol/webvidFormat"
 # SEQ_NAME="recam_edit_emjay_jho/results/val_highresol_ours_20000step"
-SEQ_NAME="recam_edit_emjay_jho/results/val_highresol_ours_93000step"
+# SEQ_NAME="recam_edit_emjay_jho/results/val_highresol_ours_93000step"
 
 # convert vipe -> colmap
 # write_points3d=false, dump_images=false를 default로 설정해둠.
