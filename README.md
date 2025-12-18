@@ -15,7 +15,7 @@
   <img src="assets/GSAI_preview_image.png" width="60%" alt="GSAI Preview">
 </p>
 
-<sup></sup>KAIST AI
+<!-- <sup></sup>KAIST AI -->
 
 </div>
 
@@ -26,7 +26,7 @@
 
 ## 🔥 Updates
 - [ ] Release training code
-- [ ] Release inference code and model weights
+- [x] Release inference code and model weights (2025.12.19)
 
   
 ## 📖 Introduction
