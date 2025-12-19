@@ -12,7 +12,7 @@
 <br>
 *Equal Contribution
 <p align="center">
-  <img src="assets/GSAI_preview_image.png" width="60%" alt="GSAI Preview">
+  <img src="assets/GSAI_preview_image.png" width="20%" alt="GSAI Preview">
 </p>
 
 <!-- <sup></sup>KAIST AI -->
