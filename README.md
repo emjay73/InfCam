@@ -21,7 +21,7 @@
 
 ## <img src="https://img.icons8.com/fluency/48/video-playlist.png" width="28" style="vertical-align:middle;"/> Teaser Video
 <p align="center">
-  <video src="assets/ours_grid_in-the-wild_1.mp4" autoplay loop muted playsinline style="max-width: 90%; height: auto; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.15);" poster="assets/GSAI_preview_image.png"></video>
+  <video src="assets/ours_grid_in-the-wild_1.mp4" autoplay loop muted playsinline style="max-width: 90%; height: auto; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.15);" poster="assets/ours_grid_in-the-wild_1.mp4"></video>
 </p>
 
 ## 🔥 Updates
