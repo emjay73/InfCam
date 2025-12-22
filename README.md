@@ -6,7 +6,7 @@
 <!-- <img src=assets/infcam_icon.png width="30%"/> -->
 </div>
 
-### [<a href="https://arxiv.org/" target="_blank">arXiv(Coming Soon)</a>] [<a href="https://emjay73.github.io/InfCam/" target="_blank">Project Page</a>] 
+### [<a href="https://arxiv.org/abs/2512.17040" target="_blank">arXiv</a>] [<a href="https://emjay73.github.io/InfCam/" target="_blank">Project Page</a>] 
 <!-- [<a href="" target="_blank">Dataset(Coming Soon)</a>] -->
 [Min-Jung Kim<sup>*</sup>](https://emjay73.github.io/), [Jeongho Kim<sup>*</sup>](https://scholar.google.co.kr/citations?user=4SCCBFwAAAAJ&hl=ko), [Hoiyeong Jin<sup></sup>](https://scholar.google.co.kr/citations?hl=ko&user=Jp-zhtUAAAAJ), [Junha Hyung<sup></sup>](https://junhahyung.github.io/), [Jaegul Choo<sup></sup>](https://sites.google.com/site/jaegulchoo)
 <br>
