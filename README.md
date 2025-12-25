@@ -71,7 +71,7 @@ pip install deepspeed
 ### 🕹️ Inference
 
 Hardware: 1x NVIDIA H100 80GB GPUs.  \
-Memory Usage: 48 GB of memory for UniDepth and 28 GB for the InfCam pipeline.
+Memory Usage: > 50 GB (48G of memory for UniDepth and 28 GB for the InfCam pipeline.)
 
 Step 1: Download the pretrained checkpoints
 
@@ -119,7 +119,6 @@ for CAM in {1..10}; do
 	    --seed ${SEED}
 done
 ```
-This inference code requires 48 GB of memory for UniDepth and 28 GB for the InfCam pipeline.
 
 Step 3: Test your own videos
 
