@@ -23,8 +23,10 @@
 https://github.com/user-attachments/assets/1c52baf4-b5ff-417e-a6c6-c8570e667bd8
 
 ## 🔥 Updates
-- [ ] Release training code
-- [x] Release inference code and model weights (2025.12.19)
+- [ ] Release data augmentation code 
+- [x] Release training code (2025.12.26)
+- [x] Release inference code (2025.12.19)
+- [x] Release model weights (2025.12.19)
 
   
 ## 📖 Introduction
@@ -33,13 +35,14 @@ https://github.com/user-attachments/assets/1c52baf4-b5ff-417e-a6c6-c8570e667bd8
 
 
 ## ⚙️ Code
-### Inference
-Step 1: Set up the environment
+
+### Environment 
 
 ```
 conda create -n infcam python=3.12
 conda activate infcam
 
+# for inference only
 pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 pip install cupy-cuda12x
 pip install transformers==4.46.2
@@ -60,16 +63,25 @@ pip install wandb
 pip install ffmpeg-python
 pip install numpy
 pip install opencv-python
+
+# for training
+pip install deepspeed
 ```
 
-Step 2: Download the pretrained checkpoints
-1. Download the pre-trained Wan2.1 model
+### 🕹️ Inference
+
+Hardware: 1x NVIDIA H100 80GB GPUs.  \
+Memory Usage: 48 GB of memory for UniDepth and 28 GB for the InfCam pipeline.
+
+Step 1: Download the pretrained checkpoints
+
+(1) Pre-trained Wan2.1 model
 
 ```shell
 python download_wan2.1.py
 ```
 
-2. Download the pre-trained UniDepth model 
+(2) Pre-trained UniDepth model 
 
 Download the pre-trained weights from [huggingface](https://huggingface.co/lpiccinelli/unidepth-v2-vitl14) and place it in ```models/unidepth-v2-vitl14```.
 ```shell
@@ -77,7 +89,7 @@ cd models
 git clone https://huggingface.co/lpiccinelli/unidepth-v2-vitl14
 ```
 
-3. Download the pre-trained InfCam checkpoint
+(3) Pre-trained InfCam checkpoint
 
 Download the pre-trained InfCam weights from [huggingface](https://huggingface.co/emjay73/InfCam/tree/main) and place it in ```models/InfCam```.
 
@@ -85,7 +97,7 @@ Download the pre-trained InfCam weights from [huggingface](https://huggingface.c
 cd models
 git clone https://huggingface.co/emjay73/InfCam
 ```
-Step 3: Test the example videos
+Step 2: Test the example videos
 
 ```shell
 bash run_inference.sh
@@ -109,13 +121,13 @@ done
 ```
 This inference code requires 48 GB of memory for UniDepth and 28 GB for the InfCam pipeline.
 
-Step 4: Test your own videos
+Step 3: Test your own videos
 
 If you want to test your own videos, you need to prepare your test data following the structure of the ```sample_data``` folder. This includes N mp4 videos, each with at least 81 frames, and a ```metadata.csv``` file that stores their paths and corresponding captions. You can refer to the '[caption branch](https://github.com/emjay73/InfCam/tree/caption) for metadata.csv extraction.
 
 
 We provide several preset camera types, as shown in the table below.
-These follow the ReCamMaster presets, but the starting point of each trajectory differs from that of the initial frame.
+These follow the [ReCamMaster](https://jianhongbai.github.io/ReCamMaster/) presets, but the starting point of each trajectory differs from that of the initial frame.
 
 | cam_type       | Trajectory                  |
 |-------------------|-----------------------------|
@@ -130,10 +142,62 @@ These follow the ReCamMaster presets, but the starting point of each trajectory 
 | 9 | Arc Left (with rotation)    |
 | 10 | Arc Right (with rotation)   |
 
+### 🚂 Train
+Hardware: 4x NVIDIA H100 80GB GPUs.
 
-## 🤗 Thank You Note
-Our work is based on the following repositories.\
-Thank you for your outstanding contributions!
+Memory Usage(low resolution, B=8, F=41 H=320 W=544): Approximately 52GB of VRAM per GPU during training.
+
+Memory Usage(high resolution, B=2, F=81 H=480 W=832): Approximately 56GB of VRAM per GPU during training. 
+
+Step1. Prepare Dataset
+
+Prepare dataset by applying data augmentation to the [MultiCamVideo-Dataset](https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset).
+
+If you would like to see an example of the training set with augmentation already applied, you can download a subset from Hugging Face: [AugMCV](https://huggingface.co/datasets/emjay73/AugMCV).
+```
+mkdir DATA
+cd DATA
+
+# download train data subset
+git clone https://huggingface.co/datasets/emjay73/AugMCV
+
+cd AugMCV
+tar -xvzf AugMCV.tar.gz --strip-components=1
+```
+
+The training data should follow the directory structure shown below:
+```
+InfCam
+└── DATA
+    └── AugMCV
+        ├── train
+        │   ├── f18_aperture10
+        │   │   └── scene1_0
+        │   │       ├── cameras
+        │   │       │   ├── camera_extrinsics.json
+        │   │       │   └── video_mapping.json
+        │   │       └── videos
+        │   │           ├── cam01.mp4
+        │   │           ├── cam01.mp4.[config].pth
+        │   │           ...
+        │   │           ├── cam10.mp4
+        │   │           └── cam10.mp4.[config].pth
+        │   ├── f18_aperture10_aug
+        │   ...
+        │   └── f50_aperture2.4
+        ├── test
+        ├── metadata_train_aug.csv
+        └── metadata_test_aug.csv
+
+```
+
+Step2. Run train
+```
+bash run_train.sh
+```
+
+## 🤗 Special Thanks
+We build upon the following repositories and thank the authors for their incredible work:
 
 [ReCamMaster](https://jianhongbai.github.io/ReCamMaster/): Re-capture in-the-wild videos with novel camera trajectories, and release a multi-camera synchronized video dataset rendered with Unreal Engine 5.
 
@@ -145,5 +209,11 @@ Thank you for your outstanding contributions!
 
 Please leave us a star 🌟 and cite our paper if you find our work helpful.
 ```
-
+bibtex
+@article{kim2025infcam,
+  title={Infinite-Homography as Robust Conditioning for Camera-Controlled Video Generation},
+  author={Kim, Min-Jung and Kim, Jeongho and Jin, Hoiyeong and Hyung, Junha and Choo, Jaegul},
+  journal={arXiv preprint arXiv:2512.17040},
+  year={2025}
+}
 ```
