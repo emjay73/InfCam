@@ -70,8 +70,8 @@ pip install deepspeed
 
 ### 🕹️ Inference
 
-Hardware: 1x NVIDIA H100 80GB GPUs.  \
-Memory Usage: > 50 GB (48G of memory for UniDepth and 28 GB for the InfCam pipeline.)
+> Hardware: 1x NVIDIA H100 80GB GPUs.  \
+> Memory Usage: > 50 GB (48G of memory for UniDepth and 28 GB for the InfCam pipeline.)
 
 Step 1: Download the pretrained checkpoints
 
@@ -142,11 +142,9 @@ These follow the [ReCamMaster](https://jianhongbai.github.io/ReCamMaster/) prese
 | 10 | Arc Right (with rotation)   |
 
 ### 🚂 Train
-Hardware: 4x NVIDIA H100 80GB GPUs.
-
-Memory Usage(low resolution, B=8, F=41 H=320 W=544): Approximately 52GB of VRAM per GPU during training.
-
-Memory Usage(high resolution, B=2, F=81 H=480 W=832): Approximately 56GB of VRAM per GPU during training. 
+> Hardware: 4x NVIDIA H100 80GB GPUs.  \
+> Memory Usage(low resolution, B=8, F=41 H=320 W=544): Approximately 52GB of VRAM per GPU during training.  \
+> Memory Usage(high resolution, B=2, F=81 H=480 W=832): Approximately 56GB of VRAM per GPU during training.   
 
 Step1. Prepare Dataset
 
