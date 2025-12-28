@@ -23,7 +23,7 @@
 https://github.com/user-attachments/assets/1c52baf4-b5ff-417e-a6c6-c8570e667bd8
 
 ## 🔥 Updates
-- [x] Release data augmentation code 
+- [x] Release data augmentation code (2025.12.29)
 - [x] Release training code (2025.12.26)
 - [x] Release inference code (2025.12.19)
 - [x] Release model weights (2025.12.19)
@@ -152,7 +152,7 @@ These follow the [ReCamMaster](https://jianhongbai.github.io/ReCamMaster/) prese
 Step1. Prepare Dataset
 1. Download [MultiCamVideo-Dataset](https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset)
 
-2. Augment MultiCamVideo-Dataset \
+2. Augment MultiCamVideo-Dataset 
 
 ```
 python preproc/step1_aug_trajectory.py --path_mcv "path to MultiCamVideo-Dataset/train" --path_augmcv DATA/AugMCV
