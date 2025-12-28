@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python train_infcam.py \
     --dataset_path "./DATA/AugMCV" \
     --batch_size ${BS} --accumulate_grad_batches ${ACCUM} --learning_rate 1e-4 \
     --num_frames ${F} --height ${H} --width ${W} \
-    --metadata_file_name "metadata_train_aug_subset.csv" \
+    --metadata_file_name "metadata_augmcv_train_subset.csv" \
     --save_every_n_steps ${SAVE_FREQ} \
     --output_path "./models/train" \
     --run_name "${TIME}__${TAG}__BS${BS}_ACCUM${ACCUM}_${H}x${W}x${F}" \

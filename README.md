@@ -23,7 +23,7 @@
 https://github.com/user-attachments/assets/1c52baf4-b5ff-417e-a6c6-c8570e667bd8
 
 ## 🔥 Updates
-- [ ] Release data augmentation code 
+- [x] Release data augmentation code 
 - [x] Release training code (2025.12.26)
 - [x] Release inference code (2025.12.19)
 - [x] Release model weights (2025.12.19)
@@ -63,6 +63,9 @@ pip install wandb
 pip install ffmpeg-python
 pip install numpy
 pip install opencv-python
+
+# for data processing
+conda install -c conda-forge ffmpeg
 
 # for training
 pip install deepspeed
@@ -147,8 +150,16 @@ These follow the [ReCamMaster](https://jianhongbai.github.io/ReCamMaster/) prese
 > Memory Usage(high resolution, B=2, F=81 H=480 W=832): Approximately 56GB of VRAM per GPU during training.   
 
 Step1. Prepare Dataset
+1. Download [MultiCamVideo-Dataset](https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset)
 
-Prepare dataset by applying data augmentation to the [MultiCamVideo-Dataset](https://huggingface.co/datasets/KlingTeam/MultiCamVideo-Dataset).
+2. Augment MultiCamVideo-Dataset \
+
+```
+python preproc/step1_aug_trajectory.py --path_mcv "path to MultiCamVideo-Dataset/train" --path_augmcv DATA/AugMCV
+python preproc/step2_aug_focallength.py --path_data DATA/AugMCV
+python preproc/step3_split_train_test.py --path_mcv "path to MultiCamVideo-Dataset/train" --path_augmcv DATA/AugMCV
+
+```
 
 If you would like to see an example of the training set with augmentation already applied, you can download a subset from Hugging Face: [AugMCV](https://huggingface.co/datasets/emjay73/AugMCV).
 ```
@@ -159,7 +170,7 @@ cd DATA
 git clone https://huggingface.co/datasets/emjay73/AugMCV
 
 cd AugMCV
-tar -xvzf AugMCV.tar.gz --strip-components=1
+tar -xvzf AugMCV.tar.gz
 ```
 
 The training data should follow the directory structure shown below:
@@ -182,9 +193,7 @@ InfCam
         │   ├── f18_aperture10_aug
         │   ...
         │   └── f50_aperture2.4
-        ├── test
-        ├── metadata_train_aug.csv
-        └── metadata_test_aug.csv
+        └── metadata_augmcv_train.csv        
 
 ```
 
