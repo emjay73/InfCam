@@ -105,6 +105,7 @@ git clone https://huggingface.co/emjay73/InfCam
 Step 2: Test the example videos
 
 ```shell
+cd ./unidepth/ops/extract_patches && bash compile.sh
 bash run_inference.sh
 ```
 or 
