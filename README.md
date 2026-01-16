@@ -89,6 +89,7 @@ python download_wan2.1.py
 Download the pre-trained weights from [huggingface](https://huggingface.co/lpiccinelli/unidepth-v2-vitl14) and place it in ```models/unidepth-v2-vitl14```.
 ```shell
 cd models
+git lfs install
 git clone https://huggingface.co/lpiccinelli/unidepth-v2-vitl14
 ```
 
@@ -98,6 +99,7 @@ Download the pre-trained InfCam weights from [huggingface](https://huggingface.c
 
 ```shell
 cd models
+git lfs install
 git clone https://huggingface.co/emjay73/InfCam
 ```
 Step 2: Test the example videos
