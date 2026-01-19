@@ -1,7 +1,18 @@
 # Evaluation
 
 ## Environment
-Follow the environmental setup of vipe (https://github.com/nv-tlabs/vipe).\
+Follow the environmental setup of vipe ( https://github.com/nv-tlabs/vipe ).
+```
+# Create a new conda environment and install 3rd-party dependencies
+conda env create -f envs/base.yml
+conda activate vipe
+# You can switch to your own PyPI index if you want.
+pip install -r envs/requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128
+
+# Build the project and install it into the current environment
+# Omit the -e flag to install the project as a regular package
+pip install --no-build-isolation -e .
+```
 And then install the following additional packages.
 ```
 pip install pandas
