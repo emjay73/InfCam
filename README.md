@@ -59,6 +59,11 @@ Step3. run vipe
 
 bash run_vipe.sh
 ```
+For those who experiencing 'ImportError: libGL.so.1: cannot open shared object file: No such file or directory'
+```
+pip uninstall opencv-python
+pip install opencv-python-headless
+```
 
 Step4. run evaluation
 ```
