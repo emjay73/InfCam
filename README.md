@@ -57,8 +57,9 @@ Step3. run vipe
 # ex) PATH_SRC_DIR="./DATA/webvid"
 # ex) PATH_GEN_DIR="results/exp_step20k_ref40"
 
-bash run_vipe.sh
+bash run_vipe_webvid.sh
 ```
+'frames' folder will be created under each 'cam_typeX' directory. \
 For those who experiencing 'ImportError: libGL.so.1: cannot open shared object file: No such file or directory'
 ```
 pip uninstall opencv-python
