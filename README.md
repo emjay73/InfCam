@@ -1,7 +1,18 @@
 # Evaluation
 
 ## Environment
-Follow the environmental setup of vipe (https://github.com/nv-tlabs/vipe).\
+Follow the environmental setup of vipe ( https://github.com/nv-tlabs/vipe ).
+```
+# Create a new conda environment and install 3rd-party dependencies
+conda env create -f envs/base.yml
+conda activate vipe
+# You can switch to your own PyPI index if you want.
+pip install -r envs/requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128
+
+# Build the project and install it into the current environment
+# Omit the -e flag to install the project as a regular package
+pip install --no-build-isolation -e .
+```
 And then install the following additional packages.
 ```
 pip install pandas
@@ -48,10 +59,21 @@ Step3. run vipe
 
 bash run_vipe_webvid.sh
 ```
+'frames' folder will be created under each 'cam_typeX' directory. \
+For those who experiencing 'ImportError: libGL.so.1: cannot open shared object file: No such file or directory'
+```
+pip uninstall opencv-python
+pip install opencv-python-headless
+```
 
 Step4. run evaluation
 ```
-bash run_metric_webvid.sh
+# modify GPU_DEVICES, DATASET_TYPE, GT_JSON, SEQ_NAME variables in the run_metric.sh before run
+# ex) GPU_DEVICES="0" 
+# ex) DATASET_TYPE="webvid"
+# ex) GT_JSON="cameras/camera_extrinsics_ref40.json"
+# ex) SEQ_NAME="results/exp_step20k_ref40" # check vipe_results/vipe and write the subfolder path of interest.
+bash run_metric_metric.sh
 ```
 
 ## AugMCV test split Evaluation
