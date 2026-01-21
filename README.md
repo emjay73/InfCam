@@ -68,6 +68,11 @@ pip install opencv-python-headless
 
 Step4. run evaluation
 ```
+# modify GPU_DEVICES, DATASET_TYPE, GT_JSON, SEQ_NAME variables in the run_metric.sh before run
+# ex) GPU_DEVICES="0" 
+# ex) DATASET_TYPE="webvid"
+# ex) GT_JSON="cameras/camera_extrinsics_ref40.json"
+# ex) SEQ_NAME="results/exp_step20k_ref40" # check vipe_results/vipe and write the subfolder path of interest.
 bash run_metric.sh
 ```
 
