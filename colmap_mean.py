@@ -4,12 +4,10 @@ import argparse
 import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument("--base_folder", type=str, required=True)
-#parser.add_argument("--original_folder", type=str, required=True)
-#parser.add_argument("--metadata_path", type=str, required=True)
 args = parser.parse_args()
 
-base_dir = args.base_folder #"/home/nas5/hoiyeongjin/repos/Research/nvvs/RESULT/jho/reimple__bs8__step37000"
-output_json_path = os.path.join(base_dir, "average_score2.json")
+base_dir = args.base_folder 
+output_json_path = os.path.join(base_dir, "average_score.json")
 
 total_ate_rot_err = 0.0
 total_ate_trans_err = 0.0
@@ -19,9 +17,7 @@ count = 0
 count_drop = 0
 out = []
 for cam_id in range(1, 11):
-    #cam_dir = f"cam_type{cam_id}"
-    cam_dir = f"cam{cam_id:02d}"
-    # score_path = os.path.join(base_dir, cam_dir, "colmap", "score.json")
+    cam_dir = f"cam_type{cam_id}"
     score_path = os.path.join(base_dir, cam_dir, "frames", "score.json")
     
     if not os.path.exists(score_path):

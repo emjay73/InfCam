@@ -39,19 +39,19 @@ cameras
 
 Step3. run vipe
 ```
-# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe.sh before run
+# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe_{data}.sh before run
 # ex) GPU_DEVICES="7" # support only single gpu.
 # ex) CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
 # ex) DATASET_TYPE='webvid'
 # ex) PATH_SRC_DIR="./DATA/webvid"
 # ex) PATH_GEN_DIR="results/exp_step20k_ref40"
 
-bash run_vipe.sh
+bash run_vipe_webvid.sh
 ```
 
 Step4. run evaluation
 ```
-bash run_metric.sh
+bash run_metric_webvid.sh
 ```
 
 ## AugMCV test split Evaluation
@@ -86,14 +86,14 @@ results
 
 Step3. run vipe
 ```
-# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe.sh before run
+# modify GPU_DEVICES, CAM_TYPES, PATH_SRC_DIR, PATH_GEN_DIR variables in the run_vipe_{data}.sh before run
 # ex) GPU_DEVICES="7" # support only single gpu.
 # ex) CAM_TYPES=(1 2 3 4 5 6 7 8 9 10)
 # ex) DATASET_TYPE='webvid'
 # ex) PATH_SRC_DIR="./DATA/webvid"
 # ex) PATH_GEN_DIR="results/exp_step20k_ref40"
 
-bash run_vipe.sh
+bash run_vipe_val.sh
 ```
 
 Step4. run evaluation
@@ -104,7 +104,7 @@ Step4. run evaluation
 # ex) GT_JSON="cameras/camera_extrinsics_ref40.json"
 # ex) SEQ_NAME="results/exp_step20k_ref40" # check vipe_results/vipe and write the subfolder path of interest.
 
-bash run_metric.sh
+bash run_metric_val.sh
 ```
 
 # ViPE readme for reference

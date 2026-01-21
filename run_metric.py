@@ -2,51 +2,10 @@ import os
 import subprocess
 import numpy as np
 import json
-# import pandas as pd # pandas 임포트 추가
 import multiprocessing as mp
 from functools import partial
 from tqdm import tqdm
 import pdb
-#COLMAP_PATH = os.path.expanduser("~/colmap_install/bin/colmap")
-#GLOMAP_PATH = os.path.expanduser("~/.local/bin/glomap")
-
-# def run_colmap_pipeline(image_dir, project_dir):
-#     db_path = os.path.join(project_dir, "database.db")
-#     sparse_dir = os.path.join(project_dir, "sparse")
-#     os.makedirs(sparse_dir, exist_ok=True)
-
-#     print("---------------- 1. Feature extraction... ----------------")
-#     subprocess.run([
-#         "colmap", "feature_extractor",
-#         "--database_path", db_path,
-#         "--image_path", image_dir,
-#         "--SiftExtraction.use_gpu", "1"
-#     ], check=True)
-
-#     print("---------------- 2. Feature matching... ----------------")
-#     subprocess.run([
-#         "colmap", "exhaustive_matcher", #"sequential_matcher", 
-#         "--database_path", db_path,
-#         "--SiftMatching.use_gpu", "1"
-#     ], check=True)
-
-#     print("---------------- 3. Sparse reconstruction... ----------------")
-#     subprocess.run([
-#         "glomap", "mapper",
-#         "--database_path", db_path,
-#         "--image_path", image_dir,
-#         "--output_path", sparse_dir
-#     ], check=True)
-
-#     print("---------------- 4. Convert to TXT... ----------------")
-#     subprocess.run([
-#         "colmap", "model_converter",
-#         "--input_path", os.path.join(sparse_dir, "0"),
-#         "--output_path", os.path.join(sparse_dir, "0"),
-#         "--output_type", "TXT"
-#     ], check=True)
-
-#     return os.path.join(sparse_dir, "0")
 
 def qvec_to_rotmat(qvec):
     w, x, y, z = qvec
@@ -63,7 +22,6 @@ def parse_gt_pose(matrix_str):
         row = row.replace('[', '').replace(']', '')
         matrix.append(list(map(float, row.split())))
     matrix = np.array(matrix)
-    #breakpoint()
 
     traj = matrix.transpose(1, 0)
 
@@ -74,12 +32,6 @@ def parse_gt_pose(matrix_str):
     return c2w
 
 def run_vipe_pipeline(image_dir, project_dir):
-    # subprocess.run([
-    #     "vipe", "infer",        
-    #     "--image_dir", image_dir,
-    #     "-o", project_dir,        
-    # ], check=True)
-
 
     cmd = [
         "python", "run.py",
@@ -97,37 +49,6 @@ def run_vipe_pipeline(image_dir, project_dir):
     else:
         print("Error occurred:")
         print(result.stderr)
-    
-    # # python scripts/vipe_to_colmap.py vipe_results/ --sequence dog_example
-    # vipe_results_path = "vipe_results/"
-    # sequence_name = "dog_example"
-
-    # result = subprocess.run([
-    #     "python", "scripts/vipe_to_colmap.py",
-    #     vipe_results_path,
-    #     "--sequence", sequence_name
-    # ], capture_output=True, text=True)
-
-    # print("Return code:", result.returncode)
-    # print("STDOUT:", result.stdout)
-    # print("STDERR:", result.stderr)
-
-        
-# def parse_gt_pose(pose_str):
-
-#     rows = pose_str.strip().split("] [")
-#     rows[0] = rows[0].lstrip("[")
-#     rows[-1] = rows[-1].rstrip("]")
-
-#     mat = [list(map(float, row.strip().split())) for row in rows]
-#     T = np.eye(4)
-#     for i in range(3):
-#         T[i, :3] = mat[i][:3]
-#     T[:3, 3] = mat[3][:3]
-
-#     T[:3, 3] /= 100.0 # Convert to meters
-
-#     return T
 
 # emjay mofidied ------------------------------------------------
 def convert_to_relative_poses(pose_dict, base_pose):
@@ -238,8 +159,6 @@ def compute_errors(images_txt_path, gt_json_path, cam_type="cam01"):
     # f0, f1 = common_frames[:2]
     # ---------------------------------------------------------
 
-    
-
     # emjay modified -----------------------------------------------
     # Make relative poses (cam-to-world) w.r.t. frame0
     colmap_poses_rel = convert_to_relative_poses(colmap_poses, first_frame_pose)
@@ -290,9 +209,7 @@ def compute_errors(images_txt_path, gt_json_path, cam_type="cam01"):
         scaled_colmap_poses_rel[pose_key][:3, 3] *= scale
     # ---------------------------------------------------------
 
-
     ate_rot, ate_trans = compute_ate(gt_poses_rel, scaled_colmap_poses_rel, common_frames)
-
 
     # # 디버깅을 위해 초반 5개 프레임의 t_gt, t_pred 출력
     # for fid in common_frames[:5]:
@@ -459,37 +376,20 @@ def process_cam_vid_combination(cam_vid_args):
     """단일 cam-vid 조합을 처리하는 worker 함수"""
     try:
         cam, vid, path_colmap, gt_json = cam_vid_args
-        # if cam == 6 and vid == 28:
-        #     pdb.set_trace()
 
-        #cam_type = f"cam_type{cam}"
-        cam_type = f"cam{cam:02d}"
+        cam_type = f"cam_type{cam}"
 
-        # path_gen_dir = os.path.join(path_gen, f"{cam_type}/frames/video{vid}")
-        # path_src_dir = os.path.join(path_src, f"videos/frames/video{vid}")
-        # path_project_dir = os.path.join(path_colmap, f"{cam_type}/colmap")                
         path_project_dir = os.path.join(path_colmap, f"{cam_type}/frames")                
         score_json_file_path = os.path.join(path_project_dir, "score.json")# Save scores to JSON
 
         process_id = f"video{vid}_{cam_type}"
         print(f"🔄 Processing {process_id}")
         
-        # Check if input directory exists
-        # if not os.path.exists(path_gen_dir):
-        #     return save_log_to_json(score_json_file_path, f"video{vid}", f"❌ {process_id}: Input directory not found: {path_gen_dir}")
-        
         # COLMAP pipeline 실행 또는 기존 결과 사용
         if not os.path.exists(os.path.join(path_project_dir, f"video{vid}")):
-            # try:
-            #     # recon_path = run_colmap_pipeline(path_gen_dir, os.path.join(path_project_dir, f"video{vid}"))
-            #     recon_path = run_vipe_pipeline(path_gen_dir, os.path.join(path_project_dir, f"video{vid}"))
-            # except subprocess.CalledProcessError as e:
-            #     return save_log_to_json(score_json_file_path, f"video{vid}", f"❌ {process_id}: VIPE pipeline failed: {str(e)}")            
             return save_log_to_json(score_json_file_path, f"video{vid}", f"❌ {process_id}: missing colmap result")
         else:
             # 실제 COLMAP 실행 대신 미리 생성된 결과 경로 사용
-            # recon_path = os.path.join(os.path.join(path_project_dir, f"video{vid}", f"video{vid}", "sparse"), "0")
-            # recon_path = os.path.join(os.path.join(path_project_dir, f"video{vid}", "sparse"), "0")
             recon_path = os.path.join(path_project_dir, f"video{vid}")
         
         # recon_path = run_vipe_pipelien(path_gen_dir, os.path.join(path_project_dir, f"video{vid}"))
@@ -528,8 +428,6 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--gt_json", type=str, required=True)
-    # parser.add_argument("--path_gen", type=str, required=True)
-    # parser.add_argument("--path_src", type=str, required=False)
     parser.add_argument("--path_colmap", type=str, required=True)
     parser.add_argument("--num_workers", type=int, default=4, help="Number of CPU workers for multiprocessing")
     parser.add_argument("--sequential", action="store_true", help="Run sequentially instead of multiprocessing")
@@ -541,13 +439,12 @@ def main():
     if args.is_webvid:
         for cam in range(1, 11):
             for vid in range(0, 100):
-                # cam_vid_combinations.append((cam, vid, args.path_gen, args.path_src, args.gt_json))
                 cam_vid_combinations.append((cam, vid, args.path_colmap, args.gt_json))
     else:  # validation
         for vid in range(0,168):
             json_p = os.path.join(args.gt_json, f"camera_extrinsics_{vid}.json")
-            # for cam in range(1, 11):
-            for cam in range(1, 2):
+            for cam in range(1, 11):
+            #for cam in range(1, 2):
                 cam_vid_combinations.append((cam, vid, args.path_colmap, json_p))
     
     total_combinations = len(cam_vid_combinations)

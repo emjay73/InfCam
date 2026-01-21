@@ -209,6 +209,26 @@ def write_points3d_txt_from_depth(
     logger.info(f"Written points3D.txt with {len(all_points)} points")
 
 
+def colmap_outputs_exist(output_dir: Path, require_points3d: bool, require_images: bool) -> bool:
+    """Check whether expected COLMAP outputs are already present."""
+    expected = [output_dir / "cameras.txt", output_dir / "images.txt"]
+    if require_points3d:
+        expected.append(output_dir / "points3D.txt")
+
+    for path in expected:
+        if not path.exists():
+            return False
+
+    if require_images:
+        images_dir = output_dir / "images"
+        if not images_dir.exists():
+            return False
+        if not any(images_dir.glob("*.jpg")):
+            return False
+
+    return True
+
+
 def extract_frames(artifact: ArtifactPath, output_dir: Path
     # emjay added -------------
     , dump_images: bool
@@ -249,6 +269,7 @@ def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step
         # emjay added -------------
         , write_points3d: bool
         , dump_images: bool
+        , skip_existing: bool
         # -------------------------
     ):
     """Convert ViPE reconstruction results to COLMAP format."""
@@ -269,6 +290,10 @@ def convert_vipe_to_colmap(artifact: ArtifactPath, output_path: Path, depth_step
     for file_path in required_files:
         if not file_path.exists():
             raise FileNotFoundError(f"Required file not found: {file_path}")
+
+    if skip_existing and colmap_outputs_exist(output_path, write_points3d, dump_images):
+        logger.info(f"Skipping conversion for {artifact.artifact_name}: outputs already exist at {output_path}")
+        return
 
     # Create output directory
     output_path.mkdir(parents=True, exist_ok=True)
@@ -327,6 +352,11 @@ def main():
     # emjay added -------------
     parser.add_argument("--write_points3d", action="store_true", help="Write points3D.txt")
     parser.add_argument("--dump_images", action="store_true", help="Dump images")
+    parser.add_argument(
+        "--skip_existing",
+        action="store_true",
+        help="Skip conversion when output directory already contains expected files",
+    )
     # -------------------------
 
     args = parser.parse_args()
@@ -355,7 +385,7 @@ def main():
         # emjay modified----------
         convert_vipe_to_colmap( artifact, args.output / artifact.artifact_subpath / artifact.artifact_name, 
                                 args.depth_step, args.use_slam_map,
-                                args.write_points3d, args.dump_images)
+                                args.write_points3d, args.dump_images, args.skip_existing)
         # original ------------------
         # convert_vipe_to_colmap(artifact, args.output / artifact.artifact_name, args.depth_step, args.use_slam_map)
         # -------------------------------
