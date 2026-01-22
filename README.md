@@ -176,6 +176,8 @@ cd AugMCV
 tar -xvzf AugMCV.tar.gz
 ```
 
+(Additionally, if you want to extract VAE features directly from video files, please follow our VAE branch: https://github.com/emjay73/InfCam/tree/vae)
+
 The training data should follow the directory structure shown below:
 ```
 InfCam
