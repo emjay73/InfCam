@@ -4,7 +4,8 @@
 Follow the environmental setup of vipe ( https://github.com/nv-tlabs/vipe ).
 ```
 # Create a new conda environment and install 3rd-party dependencies
-git clone https://github.com/emjay73/InfCam.git
+git clone https://github.com/emjay73/InfCam.git traj_err
+cd traj_err
 git checkout traj_err
 conda env create -f envs/base.yml
 conda activate vipe
