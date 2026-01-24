@@ -1,8 +1,9 @@
 # Evaluation
 
 ## Environment
-Follow the environmental setup of vipe ( https://github.com/nv-tlabs/vipe ).
+
 ```
+# Mostly from the environmental setup of vipe ( https://github.com/nv-tlabs/vipe ).
 # Create a new conda environment and install 3rd-party dependencies
 git clone https://github.com/emjay73/InfCam.git traj_err
 cd traj_err
