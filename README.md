@@ -80,7 +80,3 @@ Step4. run evaluation
 bash run_metric_metric.sh
 ```
 
-
-## License
-
-This project will download and install additional third-party **models and softwares**. Note that these models or softwares are not distributed by NVIDIA. Review the license terms of these models and projects before use. This source code is released under the [Apache 2 License](https://www.apache.org/licenses/LICENSE-2.0).
