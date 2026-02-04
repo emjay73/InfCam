@@ -23,12 +23,13 @@ class Camera(object):
         self.w2c_mat = np.linalg.inv(c2w_mat)
 
 class TextVideoCameraDataset(torch.utils.data.Dataset):
-    def __init__(self, base_path, metadata_path, args, max_num_frames=81, frame_interval=1, num_frames=81, height=480, width=832, is_i2v=False, camera_extrinsics_path=None, reverse_video=False):
+    def __init__(self, base_path, metadata_path, args, max_num_frames=81, pose_interval=1, frame_interval=1, num_frames=81, height=480, width=832, is_i2v=False, camera_extrinsics_path=None, reverse_video=False):
         metadata = pd.read_csv(metadata_path)
         self.path = [os.path.join(base_path, "videos", file_name) for file_name in metadata["file_name"]]
         self.text = metadata["text"].to_list()
         
         self.max_num_frames = max_num_frames
+        self.pose_interval = pose_interval
         self.frame_interval = frame_interval
         self.num_frames = num_frames
         self.height = height
@@ -155,7 +156,11 @@ class TextVideoCameraDataset(torch.utils.data.Dataset):
             with open(self.camera_extrinsics_path, 'r') as file:
                 cam_data = json.load(file)
 
-            cam_idx = list(range(num_frames))[::4]
+            # emjay modified -------------------            
+            cam_idx = list(range(int(num_frames*self.pose_interval)))[::int(4*self.pose_interval)]
+            # original -------------------------
+            # cam_idx = list(range(num_frames))[::4]
+            # ----------------------------------
             
             traj = [self.parse_matrix(cam_data[f"frame{idx}"][f"cam{int(self.cam_type):02d}"]) for idx in cam_idx]
             
@@ -168,6 +173,7 @@ class TextVideoCameraDataset(torch.utils.data.Dataset):
                 c2w[:3, 3] /= 100
                 c2ws.append(c2w)
             tgt_cam_params = [Camera(cam_param) for cam_param in c2ws]
+
             relative_poses = []
             for i in range(len(tgt_cam_params)):
                 relative_poses.append(torch.as_tensor(tgt_cam_params[i].c2w_mat)[:3,:])
@@ -265,6 +271,7 @@ def parse_args():
     parser.add_argument("--zoom_factor", type=float, default=1.0)
     parser.add_argument("--num_inference_steps", type=int, default=50)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--pose_interval", type=float, default=1)
     
     args = parser.parse_args()
     return args
@@ -385,6 +392,7 @@ if __name__ == '__main__':
         args.dataset_path,
         os.path.join(args.dataset_path, args.metadata_file_name),
         args,        
+        pose_interval=args.pose_interval,
         max_num_frames=args.num_frames,
         num_frames=args.num_frames,
         height=args.height,
