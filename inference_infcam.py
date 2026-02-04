@@ -260,7 +260,6 @@ def parse_args():
         default="metadata.csv",
     )
     
-    # parser.add_argument("--no_src_intrinsic", action="store_true", default=False)
     parser.add_argument("--k_from_unidepth", action="store_true", default=False)
     parser.add_argument("--zoom_factor", type=float, default=1.0)
     parser.add_argument("--num_inference_steps", type=int, default=50)
@@ -310,7 +309,7 @@ def estimate_K_from_unidepth(source_video, zoom_factor, width, height):
 
     try:
         depth_input = source_video[0].permute(1,0,2,3)
-        predictions = depth_model.infer(depth_input)
+        predictions = depth_model.infer(depth_input[:81]) # to avoid 32-bit indexing issues
         K = predictions["intrinsics"].mean(dim=0)
         
         #cam_intrinsic = torch.tensor([[K[0, 0], K[1, 1], K[0, 2], K[1, 2]]]).to(torch.bfloat16)
@@ -401,56 +400,68 @@ if __name__ == '__main__':
         collate_fn=collate_filter_none  # filter out None items
         
     )
+    
+    print(f"Dataset contains {len(dataset)} videos")
+    print(f"Processing videos for cam_type {args.cam_type}")
 
     # 5. Inference
     device = torch.device(f"cuda:0" if torch.cuda.is_available() else "cpu")
     
     for batch_idx, batch in enumerate(dataloader):
-        # save_p = os.path.join(output_dir, f"video{batch_idx}.mp4")
-        save_p = os.path.join(output_dir, f"{batch['path'][0].split('/')[-1].split('.')[0]}.mp4")
-        if os.path.exists(save_p):
-            print(f"Skipping {save_p} because it already exists.")
+        try:
+            # save_p = os.path.join(output_dir, f"video{batch_idx}.mp4")
+            save_p = os.path.join(output_dir, f"{batch['path'][0].split('/')[-1].split('.')[0]}.mp4")
+            if os.path.exists(save_p):
+                print(f"Skipping {save_p} because it already exists.")
+                continue
+
+            # skip if batch is None
+            if batch is None:
+                print(f"Skipping a batch because it was empty after filtering invalid data.")
+                continue
+
+            target_text = batch["text"]
+            source_video = batch["video"]
+            
+            
+            if args.k_from_unidepth:
+                
+                # release memory
+                pipe.to("cpu") # Move pipe to CPU temporarily to save GPU memory            
+                
+                print("estimate_K_from_unidepth")
+                #print("peak:",  measure_gpu_peak_memory(estimate_K_from_unidepth, source_video, args.zoom_factor, args.width, args.height)) # 68G??
+                cam_intrinsic = estimate_K_from_unidepth(source_video, args.zoom_factor, args.width, args.height)
+                #print("estimate_K_from_unidepth done")
+
+                # # Move pipe back to GPU            
+                pipe.to("cuda")
+                pipe.to(dtype=torch.bfloat16)           
+                
+            else:            
+                cam_intrinsic = (batch["intrinsic_cond"], batch["intrinsic_trg"]) # [b, 4] = [1, 4]
+
+            cam_extrinsic = batch["camera"] # [b, ((f-1)/4+1), 3*4] = [1, 21, 12]
+            
+            video = pipe(
+                prompt=target_text,
+                negative_prompt="色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走",
+                source_video=source_video,            
+                cam_intrinsic=cam_intrinsic,
+                cam_extrinsic=cam_extrinsic,                        
+                cfg_scale=args.cfg_scale,
+                num_inference_steps=args.num_inference_steps,
+                seed=args.seed, tiled=True,
+                num_frames=args.num_frames,
+                height=args.height,
+                width=args.width,                        
+            )
+            save_video(video, save_p, fps=30, quality=5)
+            print(f"Successfully processed and saved: {save_p}")
+        except Exception as e:
+            video_name = batch['path'][0].split('/')[-1] if batch and 'path' in batch and len(batch['path']) > 0 else f"batch_{batch_idx}"
+            print(f"Error processing {video_name} (batch {batch_idx}): {e}")
+            import traceback
+            traceback.print_exc()
+            print(f"Continuing with next video...")
             continue
-
-        # skip if batch is None
-        if batch is None:
-            print(f"Skipping a batch because it was empty after filtering invalid data.")
-            continue
-
-        target_text = batch["text"]
-        source_video = batch["video"]
-        
-        
-        if args.k_from_unidepth:
-            
-            # release memory
-            pipe.to("cpu") # Move pipe to CPU temporarily to save GPU memory            
-            
-            print("estimate_K_from_unidepth")
-            #print("peak:",  measure_gpu_peak_memory(estimate_K_from_unidepth, source_video, args.zoom_factor, args.width, args.height)) # 68G??
-            cam_intrinsic = estimate_K_from_unidepth(source_video, args.zoom_factor, args.width, args.height)
-            #print("estimate_K_from_unidepth done")
-
-            # # Move pipe back to GPU            
-            pipe.to("cuda")
-            pipe.to(dtype=torch.bfloat16)           
-            
-        else:            
-            cam_intrinsic = (batch["intrinsic_cond"], batch["intrinsic_trg"]) # [b, 4] = [1, 4]
-
-        cam_extrinsic = batch["camera"] # [b, ((f-1)/4+1), 3*4] = [1, 21, 12]
-        
-        video = pipe(
-            prompt=target_text,
-            negative_prompt="色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走",
-            source_video=source_video,            
-            cam_intrinsic=cam_intrinsic,
-            cam_extrinsic=cam_extrinsic,                        
-            cfg_scale=args.cfg_scale,
-            num_inference_steps=args.num_inference_steps,
-            seed=args.seed, tiled=True,
-            num_frames=args.num_frames,
-            height=args.height,
-            width=args.width,                        
-        )
-        save_video(video, save_p, fps=30, quality=5)
