@@ -89,6 +89,7 @@ python download_wan2.1.py
 Download the pre-trained weights from [huggingface](https://huggingface.co/lpiccinelli/unidepth-v2-vitl14) and place it in ```models/unidepth-v2-vitl14```.
 ```shell
 cd models
+git lfs install
 git clone https://huggingface.co/lpiccinelli/unidepth-v2-vitl14
 ```
 
@@ -98,11 +99,13 @@ Download the pre-trained InfCam weights from [huggingface](https://huggingface.c
 
 ```shell
 cd models
+git lfs install
 git clone https://huggingface.co/emjay73/InfCam
 ```
 Step 2: Test the example videos
 
 ```shell
+cd ./unidepth/ops/extract_patches && bash compile.sh
 bash run_inference.sh
 ```
 or 
@@ -172,6 +175,8 @@ git clone https://huggingface.co/datasets/emjay73/AugMCV
 cd AugMCV
 tar -xvzf AugMCV.tar.gz
 ```
+
+(Additionally, if you want to extract VAE features directly from video files, please follow our VAE branch: https://github.com/emjay73/InfCam/tree/vae)
 
 The training data should follow the directory structure shown below:
 ```
